@@ -6,11 +6,19 @@
 	<button @onclick="OpenAddProduct" style="display:inline-block; background-color:dodgerblue; padding:5px; border-radius:5px; margin:5px;">Add Product</button>
 	<hr style="height:3px; background-color:black; border:none; margin-bottom:15px;" />
 	<MudGrid>
-		@foreach (var product in _products)
+		@if(_products is null)
 		{
-			<div @onclick="() => OpenProductById(product)" style="margin:5px;">
-				<ProductItem Product="@product"/>
-			</div>
+			<div style="margin:5px;">Loading...</div>
+			<MudProgressCircular Color="Color.Default" Indeterminate="true" />
+		}
+		else
+		{
+			foreach (var product in _products)
+			{
+				<div @onclick="() => OpenProductById(product)" style="margin:5px;">
+					<ProductItem Product="@product" />
+				</div>
+			}
 		}
 	</MudGrid>
 </div>
