@@ -15,6 +15,14 @@
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.7" PrivateAssets="all" />
 		<PackageReference Include="MudBlazor" Version="6.0.13" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\MudBlazorOnlineShop.HttpApiClient\MudBlazorOnlineShop.HttpApiClient.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Entities\" />
+	</ItemGroup>
 	
 	
 </Project>
