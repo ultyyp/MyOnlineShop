@@ -1,12 +1,21 @@
 ﻿@page "/productinfo/{ProductId:guid}"
 @using OnlineShopFrontend.Components
 
-<div style="display:flex; justify-content:center;">
-    <ProductItem Product="@_product"> </ProductItem>
-</div>
-<div style="display:flex; justify-content:center;">
-    <button @onclick="ReturnToLastPage" style="display:inline-block; background-color:red; padding:5px; border-radius:5px; margin:5px;">Back</button>
-</div>
+@if(_product is null)
+{
+    <div style="margin:5px;">Loading...</div>
+    <MudProgressCircular Color="Color.Default" Indeterminate="true" />
+}
+else
+{
+    <div style="display:flex; justify-content:center;">
+        <ProductItem Product="@_product"> </ProductItem>
+    </div>
+    <div style="display:flex; justify-content:center;">
+        <button @onclick="ReturnToLastPage" style="display:inline-block; background-color:red; padding:5px; border-radius:5px; margin:5px;">Back</button>
+    </div>
+}
+
 
 
 

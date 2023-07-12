@@ -4,32 +4,34 @@ using OnlineShopFrontend.Entities;
 
 namespace OnlineShopFrontend.Pages
 {
-    public partial class AddProduct
+    public partial class AddProduct : IDisposable
     {
 		[Inject]
-		IMyShopClient MyShopClient { get; set; }
+		IMyShopClient? MyShopClient { get; set; }
 
 		[Inject]
-		NavigationManager NavigationManager { get; set; }
+		NavigationManager? NavigationManager { get; set; }
 
-		private string Name { get; set; }
+        private CancellationTokenSource _cts = new();
+
+		private string? Name { get; set; }
         private decimal Price { get; set; }
 
-        private async Task AddProductToCatalog()
-        {
-            var Product = new Product();
+		public void Dispose()
+		{
+            _cts.Cancel();
+		}
 
-			Product.Id = Guid.NewGuid();
-			Product.Name = Name;
-            Product.Price = Price;
-            
-            await MyShopClient.AddProduct(Product);
-            NavigationManager.NavigateTo("/catalog");
+		private async Task AddProductToCatalog()
+        {
+            var Product = new Product(Name!, Price);
+            await MyShopClient!.AddProduct(Product, _cts.Token);
+            NavigationManager!.NavigateTo("/catalog");
         }
 
         private Task BackToCatalog()
         {
-            NavigationManager.NavigateTo("/catalog");
+            NavigationManager!.NavigateTo("/catalog");
             return Task.CompletedTask;
         }
     }

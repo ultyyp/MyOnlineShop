@@ -50,6 +50,7 @@ namespace OnlineShopFrontend.Services
 			{
 				throw new ArgumentNullException(nameof(product));
 			}
+
 			var uri = $"{_host}/add_product";
 			using var response = await _httpClient.PostAsJsonAsync(uri, product, cancellationToken);
 			response.EnsureSuccessStatusCode();

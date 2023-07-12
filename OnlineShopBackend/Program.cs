@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using OnlineShopBackend.Data;
 using OnlineShopBackend.Entities;
+using OnlineShopBackend.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddCors();
 
 //Database
+builder.Services.AddScoped<IProductRepository, ProductRepositoryEf>();	
+
 var dbPath = "myapp.db";
 builder.Services.AddDbContext<AppDbContext>(
    options => options.UseSqlite($"Data Source={dbPath}"));
@@ -24,8 +27,8 @@ var app = builder.Build();
 app.UseCors(policy =>
 {
 	policy
-		.WithOrigins("https://localhost:5001")
-		.AllowAnyMethod()
+		.WithOrigins("https://localhost:5001", "https://localhost:7181")
+        .AllowAnyMethod()
 		.AllowAnyHeader();
 });
 
@@ -48,8 +51,7 @@ app.MapControllers();
 app.MapPost("/add_product", AddProduct);
 
 //R
-app.MapGet("/get_products", async (AppDbContext context)
-   => await context.Products.ToListAsync());
+app.MapGet("/get_products", GetProducts);
 
 //R
 app.MapGet("/get_product", GetProductById);
@@ -61,46 +63,30 @@ app.MapPost("/update_product", UpdateProduct);
 app.MapPost("/delete_product", DeleteProduct);
 
 
-async Task AddProduct(AppDbContext db, Product product, CancellationToken cancellationToken)
+async Task AddProduct(IProductRepository repository, Product product, CancellationToken cancellationToken)
 {
-	await db.Products.AddAsync(product, cancellationToken);
-	await db.SaveChangesAsync(cancellationToken);
+	await repository.AddProduct(product, cancellationToken);
 }
 
-async Task<Product> GetProductById(AppDbContext db, Guid productId, CancellationToken cancellationToken)
+async Task<List<Product>> GetProducts(IProductRepository repository, CancellationToken cancellationToken)
 {
-	var prod = await db.Products.FirstAsync(p => p.Id == productId, cancellationToken);
-	return prod;
+	return await repository.GetProducts(cancellationToken);
+}
+
+async Task<Product> GetProductById(IProductRepository repository, Guid productId, CancellationToken cancellationToken)
+{
+	return await repository.GetProductById(productId, cancellationToken);
 }
 
 
-async Task UpdateProduct(HttpContext context, AppDbContext db, Guid productId, Product product, CancellationToken cancellationToken)
+async Task UpdateProduct(IProductRepository repository, Guid productId, Product product, CancellationToken cancellationToken)
 {
-	var prod = await db.Products.SingleOrDefaultAsync(p => p.Id == productId, cancellationToken);
-	if(prod!=null)
-	{
-		db.Entry(prod).CurrentValues.SetValues(product);
-		await db.SaveChangesAsync(cancellationToken);
-	}
-	else
-	{
-		context.Response.StatusCode = 404;
-	}
-
+	await repository.UpdateProductById(productId, product, cancellationToken);
 }
 
-async Task DeleteProduct(HttpContext context, AppDbContext db, Guid productId, CancellationToken cancellationToken)
+async Task DeleteProduct(IProductRepository repository, Guid productId, CancellationToken cancellationToken)
 {
-	var prod = await db.Products.SingleOrDefaultAsync(p => p.Id == productId, cancellationToken);
-	if(prod != null)
-	{
-		db.Products.Remove(prod);
-		await db.SaveChangesAsync(cancellationToken);
-	}
-	else
-	{
-		context.Response.StatusCode = 404;
-	}
+	await repository.DeleteProductById(productId, cancellationToken);
 }
 
 
