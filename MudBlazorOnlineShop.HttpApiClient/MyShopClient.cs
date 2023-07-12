@@ -26,46 +26,55 @@ namespace OnlineShopFrontend.Services
 		}
 
 
-		public async Task<Product> GetProduct(Guid id)
+		public async Task<Product> GetProduct(Guid id, CancellationToken cancellationToken = default)
 		{
+			ArgumentNullException.ThrowIfNull(id);
+
 			string uri = $"{_host}/get_product?productId={id}";
-			Product? product = await _httpClient.GetFromJsonAsync<Product>(uri);
+			Product? product = await _httpClient.GetFromJsonAsync<Product>(uri, cancellationToken);
 			return product!;
 		}
 
-		public async Task<List<Product>> GetProducts()
+		public async Task<List<Product>> GetProducts(CancellationToken cancellationToken = default)
 		{
 			string uri = $"{_host}/get_products";
-			List<Product>? response = await _httpClient.GetFromJsonAsync<List<Product>>(uri);
+			List<Product>? response = await _httpClient.GetFromJsonAsync<List<Product>>(uri, cancellationToken);
 			return response!;
 		}
 
-		public async Task AddProduct(Product product)
+		public async Task AddProduct(Product product, CancellationToken cancellationToken = default)
 		{
+			ArgumentNullException.ThrowIfNull(product);
+
 			if (product is null)
 			{
 				throw new ArgumentNullException(nameof(product));
 			}
 			var uri = $"{_host}/add_product";
-			using var response = await _httpClient.PostAsJsonAsync(uri, product);
+			using var response = await _httpClient.PostAsJsonAsync(uri, product, cancellationToken);
 			response.EnsureSuccessStatusCode();
 		}
 
-		public async Task UpdateProduct(Product product, long id)
+		public async Task UpdateProduct(Product product, long id, CancellationToken cancellationToken = default)
 		{
+			ArgumentNullException.ThrowIfNull(product);
+			ArgumentNullException.ThrowIfNull(id);
+
 			if (product is null)
 			{
 				throw new ArgumentNullException(nameof(product));
 			}
 			var uri = $"{_host}/update_product?productId={id}";
-			using var response = await _httpClient.PostAsJsonAsync(uri, product);
+			using var response = await _httpClient.PostAsJsonAsync(uri, product, cancellationToken);
 			response.EnsureSuccessStatusCode();
 		}
 
-		public async Task DeleteProduct(long id)
+		public async Task DeleteProduct(long id, CancellationToken cancellationToken = default)
 		{
+			ArgumentNullException.ThrowIfNull(id);
+
 			var uri = $"{_host}/delete_product?productId={id}";
-			using var response = await _httpClient.DeleteAsync(uri);
+			using var response = await _httpClient.DeleteAsync(uri, cancellationToken);
 			response.EnsureSuccessStatusCode();
 		}
 

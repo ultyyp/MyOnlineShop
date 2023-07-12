@@ -4,10 +4,10 @@ namespace OnlineShopFrontend.Interfaces
 {
     public interface IMyShopClient
     {
-        Task AddProduct(Product product);
-        Task DeleteProduct(long id);
-        Task<Product> GetProduct(Guid id);
-        Task<List<Product>> GetProducts();
-        Task UpdateProduct(Product product, long id);
+        Task AddProduct(Product product, CancellationToken cancellationToken);
+        Task DeleteProduct(long id, CancellationToken cancellationToken);
+        Task<Product> GetProduct(Guid id, CancellationToken cancellationToken);
+        Task<List<Product>> GetProducts(CancellationToken cancellationToken);
+        Task UpdateProduct(Product product, long id, CancellationToken cancellationToken;
     }
 }

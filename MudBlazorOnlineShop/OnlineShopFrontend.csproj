@@ -7,6 +7,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Entities\**" />
+	  <Content Remove="Entities\**" />
+	  <EmbeddedResource Remove="Entities\**" />
+	  <None Remove="Entities\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <None Include="wwwroot\css\bootstrap.css" />
 	</ItemGroup>
 
@@ -18,10 +25,6 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\MudBlazorOnlineShop.HttpApiClient\MudBlazorOnlineShop.HttpApiClient.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Entities\" />
 	</ItemGroup>
 	
 	
