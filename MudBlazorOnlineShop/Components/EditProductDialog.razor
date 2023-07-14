@@ -1,0 +1,18 @@
+﻿<MudDialog>
+    <DialogContent>
+
+        <label>Product Name:</label>
+        <input @bind="Name" type="text" placeholder="Name" style="border-color:black; border-width:2px; border-style:groove; align-self:center; text-align:center; padding:5px;  border-radius:5px; margin:5px; width:fit-content;">
+        <hr />
+
+        <label>Product Price:</label>
+        <input @bind="Price" type="number" style="border-color:black; border-width:2px; border-style:groove; align-self:center; text-align:center; padding:5px;  border-radius:5px; margin:5px; width:fit-content;">
+        <hr />
+
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">Ok</MudButton>
+    </DialogActions>
+</MudDialog>
+

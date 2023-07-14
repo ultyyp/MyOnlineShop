@@ -12,7 +12,9 @@ else
         <ProductItem Product="@_product"> </ProductItem>
     </div>
     <div style="display:flex; justify-content:center;">
-        <button @onclick="ReturnToLastPage" style="display:inline-block; background-color:red; padding:5px; border-radius:5px; margin:5px;">Back</button>
+        <button @onclick="OpenEditDialog" style="display:inline-block; background-color:wheat; padding:5px; border-radius:5px; margin:5px;">Edit</button>
+        <button @onclick="DeleteProduct" style="display:inline-block; background-color:red; padding:5px; border-radius:5px; margin:5px;">Delete</button>
+        <button @onclick="ReturnToCatalog" style="display:inline-block; background-color:lightslategray; padding:5px; border-radius:5px; margin:5px;">Back</button>
     </div>
 }
 

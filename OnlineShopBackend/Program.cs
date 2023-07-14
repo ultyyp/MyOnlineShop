@@ -28,8 +28,8 @@ app.UseCors(policy =>
 {
 	policy
 		.WithOrigins("https://localhost:5001", "https://localhost:7181")
-        .AllowAnyMethod()
-		.AllowAnyHeader();
+		.AllowAnyHeader()
+		.AllowAnyMethod();
 });
 
 

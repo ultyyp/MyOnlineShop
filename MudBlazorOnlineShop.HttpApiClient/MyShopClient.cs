@@ -56,7 +56,7 @@ namespace OnlineShopFrontend.Services
 			response.EnsureSuccessStatusCode();
 		}
 
-		public async Task UpdateProduct(Product product, long id, CancellationToken cancellationToken = default)
+		public async Task UpdateProduct(Product product, Guid id, CancellationToken cancellationToken = default)
 		{
 			ArgumentNullException.ThrowIfNull(product);
 			ArgumentNullException.ThrowIfNull(id);
@@ -65,17 +65,18 @@ namespace OnlineShopFrontend.Services
 			{
 				throw new ArgumentNullException(nameof(product));
 			}
+
 			var uri = $"{_host}/update_product?productId={id}";
 			using var response = await _httpClient.PostAsJsonAsync(uri, product, cancellationToken);
 			response.EnsureSuccessStatusCode();
 		}
 
-		public async Task DeleteProduct(long id, CancellationToken cancellationToken = default)
+		public async Task DeleteProduct(Guid id, CancellationToken cancellationToken = default)
 		{
 			ArgumentNullException.ThrowIfNull(id);
 
 			var uri = $"{_host}/delete_product?productId={id}";
-			using var response = await _httpClient.DeleteAsync(uri, cancellationToken);
+			using var response = await _httpClient.PostAsync(uri, null, cancellationToken);
 			response.EnsureSuccessStatusCode();
 		}
 

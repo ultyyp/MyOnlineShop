@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Components;
 using OnlineShopFrontend.Interfaces;
 using OnlineShopFrontend.Entities;
+using MudBlazor;
+using OnlineShopFrontend.Components;
 
 namespace OnlineShopFrontend.Pages
 {
@@ -9,6 +11,9 @@ namespace OnlineShopFrontend.Pages
     {
         [Inject]
         IMyShopClient? MyShopClient { get; set; }
+
+        [Inject]
+        IDialogService? DialogService { get; set; }
 
         [Inject]
         NavigationManager? NavigationManager { get; set; }
@@ -29,10 +34,25 @@ namespace OnlineShopFrontend.Pages
             _product = await MyShopClient!.GetProduct(ProductId, _cts.Token);
         }
 
-		private Task ReturnToLastPage()
+        private void OpenEditDialog()
+        {
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            DialogParameters dialogParameters = new()
+            {
+                { "ProductId", ProductId }
+            };
+            DialogService.Show<EditProductDialog>("Edit Product", dialogParameters, options);
+        }
+
+        private async Task DeleteProduct()
+        {
+            await MyShopClient!.DeleteProduct(ProductId, _cts.Token);
+            ReturnToCatalog();
+        }
+
+		private void ReturnToCatalog()
         {
 			NavigationManager!.NavigateTo($"/catalog");
-			return Task.CompletedTask;
 		}
 
 		public void Dispose()
