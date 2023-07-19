@@ -16,20 +16,21 @@ namespace OnlineShopBackend.Controllers
         [HttpPost("add_product")]
         public async Task AddProduct([FromBody] Product product, CancellationToken cancellationToken)
         {
-            await _productRepository.AddProduct(product, cancellationToken);
+            await _productRepository.Add(product, cancellationToken);
         }
 
         [HttpGet("get_products")]
-        public async Task<List<Product>> GetProducts(CancellationToken cancellationToken)
+        public async Task<IReadOnlyList<Product>> GetProducts(CancellationToken cancellationToken)
         {
-            return await _productRepository.GetProducts(cancellationToken);
+            return await _productRepository.GetAll(cancellationToken);
         }
+
 
 
         [HttpGet("get_product")]
         public async Task<Product> GetProductById(Guid productId, CancellationToken cancellationToken)
         {
-            return await _productRepository.GetProductById(productId, cancellationToken);
+            return await _productRepository.GetById(productId, cancellationToken);
         }
 
         [HttpPost("update_product")]

@@ -7,7 +7,7 @@ namespace OnlineShopBackend.Repositories
     public class EfRepository<TEntity> : IRepository<TEntity> 
         where TEntity : class, IEntity
     {
-        private readonly AppDbContext _dbContext;
+        protected readonly AppDbContext _dbContext;
 
         public EfRepository(AppDbContext dbContext)
         {
