@@ -23,13 +23,13 @@ namespace OnlineShopFrontend.Components
         private string? Name { get; set; }
         private decimal Price { get; set; }
 
-        void Submit()
+        async Task Submit()
         {
             if (!(string.IsNullOrEmpty(Name) || Price == 0))
             {
                 var product = new Product(Name, Price);
                 product.Id = ProductId;
-                MyShopClient.UpdateProduct(product, ProductId, _cts.Token);
+                await MyShopClient.UpdateProduct(product, ProductId, _cts.Token);
                 MudDialog.Close(DialogResult.Ok(true));
                 NavigationManager.NavigateTo("/catalog");
             }

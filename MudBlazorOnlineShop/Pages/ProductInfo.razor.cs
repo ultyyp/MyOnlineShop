@@ -41,7 +41,15 @@ namespace OnlineShopFrontend.Pages
             {
                 { "ProductId", ProductId }
             };
+
+            Action<IDialogReference, DialogResult> dialogCloseRequestedDelegate = (dialogReference, dialogResult) =>
+            {
+                StateHasChanged();
+            };
+            DialogService.OnDialogCloseRequested += dialogCloseRequestedDelegate;
+
             DialogService.Show<EditProductDialog>("Edit Product", dialogParameters, options);
+            
         }
 
         private async Task DeleteProduct()

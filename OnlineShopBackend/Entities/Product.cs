@@ -1,6 +1,8 @@
-﻿namespace OnlineShopBackend.Entities
+﻿using OnlineShopBackend.Interfaces;
+
+namespace OnlineShopBackend.Entities
 {
-	public class Product
+	public class Product : IEntity
 	{
         private Product() { }
 
@@ -11,7 +13,7 @@
             Price = price;
         }
        
-        public Guid Id { get; set; }
+        public Guid Id { get; init; }
 		public string Name { get; set; }
 		public decimal Price { get; set; }
 	}

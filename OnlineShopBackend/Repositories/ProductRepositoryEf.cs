@@ -1,14 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using OnlineShopBackend.Data;
 using OnlineShopBackend.Entities;
 using OnlineShopBackend.Interfaces;
 
-namespace OnlineShopBackend.Data
+namespace OnlineShopBackend.Repositories
 {
     public class ProductRepositoryEf : IProductRepository
     {
         private readonly AppDbContext _dbContext;
 
-        public ProductRepositoryEf(AppDbContext dbContext) 
+        public ProductRepositoryEf(AppDbContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -63,9 +64,9 @@ namespace OnlineShopBackend.Data
             }
         }
 
-        
-       
 
-        
+
+
+
     }
 }

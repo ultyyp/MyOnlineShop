@@ -30,14 +30,14 @@ namespace OnlineShopFrontend.Services
 		{
 			ArgumentNullException.ThrowIfNull(id);
 
-			string uri = $"{_host}/get_product?productId={id}";
+			string uri = $"{_host}/catalog/get_product?productId={id}";
 			Product? product = await _httpClient.GetFromJsonAsync<Product>(uri, cancellationToken);
 			return product!;
 		}
 
 		public async Task<List<Product>> GetProducts(CancellationToken cancellationToken = default)
 		{
-			string uri = $"{_host}/get_products";
+			string uri = $"{_host}/catalog/get_products";
 			List<Product>? response = await _httpClient.GetFromJsonAsync<List<Product>>(uri, cancellationToken);
 			return response!;
 		}
@@ -51,7 +51,7 @@ namespace OnlineShopFrontend.Services
 				throw new ArgumentNullException(nameof(product));
 			}
 
-			var uri = $"{_host}/add_product";
+			var uri = $"{_host}/catalog/add_product";
 			using var response = await _httpClient.PostAsJsonAsync(uri, product, cancellationToken);
 			response.EnsureSuccessStatusCode();
 		}
@@ -66,7 +66,7 @@ namespace OnlineShopFrontend.Services
 				throw new ArgumentNullException(nameof(product));
 			}
 
-			var uri = $"{_host}/update_product?productId={id}";
+			var uri = $"{_host}/catalog/update_product?productId={id}";
 			using var response = await _httpClient.PostAsJsonAsync(uri, product, cancellationToken);
 			response.EnsureSuccessStatusCode();
 		}
@@ -75,7 +75,7 @@ namespace OnlineShopFrontend.Services
 		{
 			ArgumentNullException.ThrowIfNull(id);
 
-			var uri = $"{_host}/delete_product?productId={id}";
+			var uri = $"{_host}/catalog/delete_product?productId={id}";
 			using var response = await _httpClient.PostAsync(uri, null, cancellationToken);
 			response.EnsureSuccessStatusCode();
 		}
