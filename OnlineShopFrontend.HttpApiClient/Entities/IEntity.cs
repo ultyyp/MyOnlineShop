@@ -1,4 +1,4 @@
-﻿namespace OnlineShopFrontend.Interfaces
+﻿namespace OnlineShopFrontend.HttpApiClient.Entities
 {
     public interface IEntity
     {

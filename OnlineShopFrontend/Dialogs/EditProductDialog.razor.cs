@@ -1,7 +1,7 @@
-using OnlineShopFrontend.Entities;
+using OnlineShopFrontend.HttpApiClient.Entities;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using OnlineShopFrontend.Interfaces;
+using OnlineShopFrontend.HttpApiClient;
 
 namespace OnlineShopFrontend.Dialogs
 {

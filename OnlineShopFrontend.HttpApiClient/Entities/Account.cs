@@ -1,7 +1,4 @@
-﻿using OnlineShopFrontend.Interfaces;
-using System.ComponentModel.DataAnnotations;
-
-namespace OnlineShopFrontend.Entities
+﻿namespace OnlineShopFrontend.HttpApiClient.Entities
 {
     public class Account : IEntity
     {

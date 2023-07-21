@@ -1,6 +1,6 @@
-﻿using OnlineShopFrontend.Entities;
+﻿using OnlineShopFrontend.HttpApiClient.Entities;
 
-namespace OnlineShopFrontend.Interfaces
+namespace OnlineShopFrontend.HttpApiClient
 {
     public interface IMyShopClient
     {

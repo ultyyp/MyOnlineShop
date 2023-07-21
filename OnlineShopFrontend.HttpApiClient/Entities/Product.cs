@@ -1,4 +1,4 @@
-﻿namespace OnlineShopFrontend.Entities
+﻿namespace OnlineShopFrontend.HttpApiClient.Entities
 {
     public class Product
     {

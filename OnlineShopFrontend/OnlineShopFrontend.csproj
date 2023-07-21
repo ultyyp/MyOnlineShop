@@ -24,7 +24,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\MudBlazorOnlineShop.HttpApiClient\MudBlazorOnlineShop.HttpApiClient.csproj" />
+	  <ProjectReference Include="..\OnlineShopFrontend.HttpApiClient\OnlineShopFrontend.HttpApiClient.csproj" />
 	</ItemGroup>
 	
 	

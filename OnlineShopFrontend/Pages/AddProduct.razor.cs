@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Components;
-using OnlineShopFrontend.Interfaces;
-using OnlineShopFrontend.Entities;
+using OnlineShopFrontend.HttpApiClient.Entities;
+using OnlineShopFrontend.HttpApiClient;
 
 namespace OnlineShopFrontend.Pages
 {

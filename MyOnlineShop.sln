@@ -5,9 +5,9 @@ VisualStudioVersion = 17.6.33723.286
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineShopBackend", "OnlineShopBackend\OnlineShopBackend.csproj", "{DFE098BC-F003-4D15-BA70-441F04681881}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineShopFrontend", "MudBlazorOnlineShop\OnlineShopFrontend.csproj", "{94E1FDD5-DC28-48CB-85FC-AFA38D01EA80}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineShopFrontend", "OnlineShopFrontend\OnlineShopFrontend.csproj", "{94E1FDD5-DC28-48CB-85FC-AFA38D01EA80}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MudBlazorOnlineShop.HttpApiClient", "MudBlazorOnlineShop.HttpApiClient\MudBlazorOnlineShop.HttpApiClient.csproj", "{E2268AA6-5468-4C9C-804E-5E9863345001}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineShopFrontend.HttpApiClient", "OnlineShopFrontend.HttpApiClient\OnlineShopFrontend.HttpApiClient.csproj", "{E2268AA6-5468-4C9C-804E-5E9863345001}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

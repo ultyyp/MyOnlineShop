@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MudBlazor.Services;
 using OnlineShopFrontend;
+using OnlineShopFrontend.HttpApiClient;
 using OnlineShopFrontend.Interfaces;
 using OnlineShopFrontend.Services;
 

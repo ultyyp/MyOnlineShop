@@ -1,8 +1,7 @@
-﻿using OnlineShopFrontend.Entities;
-using OnlineShopFrontend.Interfaces;
+﻿using OnlineShopFrontend.HttpApiClient.Entities;
 using System.Net.Http.Json;
 
-namespace OnlineShopFrontend.Services
+namespace OnlineShopFrontend.HttpApiClient
 {
     public class MyShopClient : IDisposable, IMyShopClient
 	{
