@@ -8,7 +8,9 @@
 		//Список таблиц:
 		public DbSet<Product> Products => Set<Product>();
 
-		public AppDbContext(
+        public DbSet<Account> Accounts => Set<Account>();
+
+        public AppDbContext(
 			DbContextOptions<AppDbContext> options)
 			: base(options)
 		{

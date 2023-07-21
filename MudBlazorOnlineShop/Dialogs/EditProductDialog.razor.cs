@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using OnlineShopFrontend.Interfaces;
 
-namespace OnlineShopFrontend.Components
+namespace OnlineShopFrontend.Dialogs
 {
     public partial class EditProductDialog
     {

@@ -1,7 +1,7 @@
-﻿using OnlineShopBackend.Interfaces;
+﻿using OnlineShopFrontend.Interfaces;
 using System.ComponentModel.DataAnnotations;
 
-namespace OnlineShopBackend.Entities
+namespace OnlineShopFrontend.Entities
 {
     public class Account : IEntity
     {

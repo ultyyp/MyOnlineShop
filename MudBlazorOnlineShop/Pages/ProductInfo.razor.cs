@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Components;
 using OnlineShopFrontend.Interfaces;
 using OnlineShopFrontend.Entities;
 using MudBlazor;
-using OnlineShopFrontend.Components;
+using OnlineShopFrontend.Dialogs;
 
 namespace OnlineShopFrontend.Pages
 {

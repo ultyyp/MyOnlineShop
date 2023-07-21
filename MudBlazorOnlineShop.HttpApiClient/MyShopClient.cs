@@ -28,16 +28,14 @@ namespace OnlineShopFrontend.Services
 
 		public async Task<Product> GetProduct(Guid id, CancellationToken cancellationToken = default)
 		{
-			ArgumentNullException.ThrowIfNull(id);
-
-			string uri = $"{_host}/catalog/get_product?productId={id}";
+			string uri = $"/catalog/get_product?productId={id}";
 			Product? product = await _httpClient.GetFromJsonAsync<Product>(uri, cancellationToken);
 			return product!;
 		}
 
 		public async Task<List<Product>> GetProducts(CancellationToken cancellationToken = default)
 		{
-			string uri = $"{_host}/catalog/get_products";
+			string uri = $"/catalog/get_products";
 			List<Product>? response = await _httpClient.GetFromJsonAsync<List<Product>>(uri, cancellationToken);
 			return response!;
 		}
@@ -51,7 +49,7 @@ namespace OnlineShopFrontend.Services
 				throw new ArgumentNullException(nameof(product));
 			}
 
-			var uri = $"{_host}/catalog/add_product";
+			var uri = $"/catalog/add_product";
 			using var response = await _httpClient.PostAsJsonAsync(uri, product, cancellationToken);
 			response.EnsureSuccessStatusCode();
 		}
@@ -59,32 +57,38 @@ namespace OnlineShopFrontend.Services
 		public async Task UpdateProduct(Product product, Guid id, CancellationToken cancellationToken = default)
 		{
 			ArgumentNullException.ThrowIfNull(product);
-			ArgumentNullException.ThrowIfNull(id);
 
 			if (product is null)
 			{
 				throw new ArgumentNullException(nameof(product));
 			}
 
-			var uri = $"{_host}/catalog/update_product?productId={id}";
+			var uri = $"/catalog/update_product?productId={id}";
 			using var response = await _httpClient.PostAsJsonAsync(uri, product, cancellationToken);
 			response.EnsureSuccessStatusCode();
 		}
 
 		public async Task DeleteProduct(Guid id, CancellationToken cancellationToken = default)
 		{
-			ArgumentNullException.ThrowIfNull(id);
-
-			var uri = $"{_host}/catalog/delete_product?productId={id}";
+			var uri = $"/catalog/delete_product?productId={id}";
 			using var response = await _httpClient.PostAsync(uri, null, cancellationToken);
 			response.EnsureSuccessStatusCode();
 		}
 
-		public void Dispose()
+        public async Task Register(Account account, CancellationToken cancellationToken)
+        {
+			ArgumentNullException.ThrowIfNull(account);
+
+			var uri = "/account/register";
+			using var response = await _httpClient.PostAsJsonAsync(uri, account, cancellationToken);
+			response.EnsureSuccessStatusCode();
+        }
+
+        public void Dispose()
 		{
 			((IDisposable)_httpClient).Dispose();
 		}
 
-
-	}
+        
+    }
 }
