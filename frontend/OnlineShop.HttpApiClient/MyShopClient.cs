@@ -190,7 +190,8 @@ namespace OnlineShop.HttpApiClient
 
 			
 			var responseData = await response.Content.ReadFromJsonAsync<TResponse>(cancellationToken: cancellationToken);
-			return responseData!;
+			return responseData;
+			
 		}
 
 
