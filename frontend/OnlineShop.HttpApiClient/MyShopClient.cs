@@ -140,7 +140,7 @@ namespace OnlineShop.HttpApiClient
 			var uri = "/account/register";
 			try
 			{
-				await PostAsJsonAndDeserializeAsync<RegisterRequest, LoginResponse>(uri, request, cancellationToken);
+				await PostAsJsonAndDeserializeAsync<RegisterRequest, RegisterResponse>(uri, request, cancellationToken);
 			}
 			catch (MyShopApiException ex)
 			{
@@ -190,7 +190,7 @@ namespace OnlineShop.HttpApiClient
 
 			
 			var responseData = await response.Content.ReadFromJsonAsync<TResponse>(cancellationToken: cancellationToken);
-			return responseData;
+			return responseData!;
 			
 		}
 

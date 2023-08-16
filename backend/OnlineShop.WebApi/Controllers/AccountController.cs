@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Domain.Entities;
 using OnlineShop.Domain.Exceptions;
 using OnlineShop.Domain.Services;
 using OnlineShop.HttpModels.Requests;
@@ -19,19 +20,19 @@ namespace OnlineShop.WebApi.Controllers
 
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(RegisterRequest request,
+        public async Task<ActionResult<RegisterResponse>> Register(RegisterRequest request,
             CancellationToken cancellationToken)
         {
             try
             {
-				await _accountService.Register(request.Name, request.Email, request.Password, cancellationToken);
+				var account = await _accountService.Register(request.Name, request.Email, request.Password, cancellationToken);
+				return new RegisterResponse(account.Id, account.Name);
 			}
             catch (EmailAlreadyExistsException)
             {
                 return Conflict(new ErrorResponse("Email Already Registered!"));
             }
-            
-            return Ok();
+           
         }
 
 

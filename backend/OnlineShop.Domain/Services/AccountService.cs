@@ -16,7 +16,7 @@ namespace OnlineShop.Domain.Services
 		}
 
 
-        public async Task Register(string name, string email, string password, CancellationToken cancellationToken)
+        public async Task<Account> Register(string name, string email, string password, CancellationToken cancellationToken)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException($"'{nameof(name)}' cannot be null or whitespace.", nameof(name));
@@ -34,6 +34,7 @@ namespace OnlineShop.Domain.Services
 
             var account = new Account(Guid.Empty, name, email, EncryptPassword(password));
             await _accountRepository.Add(account, cancellationToken);
+            return account;
             
         }
 
