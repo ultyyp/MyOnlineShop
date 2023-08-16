@@ -1,0 +1,93 @@
+﻿@using OnlineShop.Frontend.Components
+@using System.ComponentModel.DataAnnotations
+@using OnlineShop.HttpApiClient.Entities;
+@using OnlineShop.HttpApiClient;
+@using OnlineShop.Frontend.Interfaces;
+@using OnlineShop.HttpModels.Requests;
+
+@inject IMyShopClient Client
+@inject IDialogService DialogService
+@inject NavigationManager NavigationManager
+@inject ISnackbar Snackbar
+
+<EditForm Model="@model" OnValidSubmit="OnValidSubmit">
+	<DataAnnotationsValidator />
+	<MudGrid>
+		<MudItem>
+			<MudCard>
+				<MudCardContent>
+					<MudTextField Label="First name" HelperText="Max. 8 characters"
+					@bind-Value="model.Name" For="@(() => model.Name)" />
+					<MudTextField Label="Email" Class="mt-3"
+					@bind-Value="model.Email" For="@(() => model.Email)" />
+					<MudTextField Label="Password" HelperText="Choose a strong password" Class="mt-3"
+					@bind-Value="model.Password" For="@(() => model.Password)" InputType="InputType.Password" />
+					<MudTextField Label="Password" HelperText="Repeat the password" Class="mt-3"
+					@bind-Value="model.ConfirmedPassword" For="@(() => model.ConfirmedPassword)" InputType="InputType.Password" />
+				</MudCardContent>
+				<MudCardActions>
+					<MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Register</MudButton>
+				</MudCardActions>
+			</MudCard>
+		</MudItem>
+		<MudItem>
+			@if (_registrationInProgress)
+			{
+				<MudProgressLinear Color="Color.Primary" Indeterminate="true" />
+			}
+		</MudItem>
+	</MudGrid>
+</EditForm>
+
+@code {
+	RegisterRequest model = new RegisterRequest();
+	bool _registrationInProgress;
+
+
+	private async Task OnValidSubmit(EditContext context)
+	{
+		if(_registrationInProgress)
+		{
+			Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomLeft;
+			Snackbar.Add("Registration in progress...", Severity.Info);
+			return;
+		}
+
+		_registrationInProgress = true;
+
+		try
+		{
+			await Client.Register(new RegisterRequest()
+			{
+				Name = model.Name,
+				Email = model.Email,
+				Password = model.Password,
+				ConfirmedPassword = model.ConfirmedPassword
+			}, default);
+
+			StateHasChanged();
+			NavigationManager.NavigateTo("/login");
+
+			await DialogService.ShowMessageBox(
+				"Success!",
+				"Registration complete.",
+				yesText: "OK"
+			);
+		}
+		catch(MyShopApiException e)
+		{
+			_registrationInProgress = false;
+			await DialogService.ShowMessageBox("Error!", e.Message, yesText: "OK");
+		}
+		finally
+		{
+			_registrationInProgress = false;
+		}
+
+	}
+}
+
+
+
+
+
