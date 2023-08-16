@@ -1,6 +1,7 @@
 ﻿@page "/login"
 @using OnlineShop.Frontend.Components
 @using System.ComponentModel.DataAnnotations
+@using OnlineShop.Frontend.Dialogs;
 @using OnlineShop.HttpApiClient.Entities;
 @using OnlineShop.HttpApiClient;
 @using OnlineShop.Frontend.Interfaces;
@@ -14,7 +15,7 @@
 <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
 	<DataAnnotationsValidator />
 	<MudGrid>
-		<MudItem Style="width: 3000px;">
+		<MudItem Style="width: 100%;">
 			<MudCard>
 				<MudCardContent>
 					<MudTextField Label="Email" Class="mt-3"
@@ -32,6 +33,13 @@
 			{
 				<MudProgressLinear Color="Color.Primary" Indeterminate="true" />
 			}
+		</MudItem>
+		<MudItem xs="12">
+			<MudText Typo="Typo.body2" Align="Align.Center">
+				Don't Have An Account Yet?
+				<MudButton OnClick="@OpenRegisterWindow" Typo="Typo.body2" Color="Color.Inherit"><b>Register</b></MudButton>
+			</MudText>
+
 		</MudItem>
 	</MudGrid>
 </EditForm>
@@ -79,6 +87,12 @@
 			_loginInProgress = false;
 		}
 
+	}
+
+	private void OpenRegisterWindow()
+	{
+		var options = new DialogOptions { CloseOnEscapeKey = true };
+		DialogService.Show<RegisterDialog>("Register", options);
 	}
 }
 
