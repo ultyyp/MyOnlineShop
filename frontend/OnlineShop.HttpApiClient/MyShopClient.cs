@@ -77,63 +77,124 @@ namespace OnlineShop.HttpApiClient
 			response.EnsureSuccessStatusCode();
 		}
 
-        public async Task Register(RegisterRequest request, CancellationToken cancellationToken)
-        {
-			ArgumentNullException.ThrowIfNull(request);
+		//public async Task Register(RegisterRequest request, CancellationToken cancellationToken)
+		//{
+		//	ArgumentNullException.ThrowIfNull(request);
 
+		//	var uri = "/account/register";
+		//	using var response = await _httpClient.PostAsJsonAsync(uri, request, cancellationToken);
+		//	if (!response.IsSuccessStatusCode)
+		//	{
+		//		if (response.StatusCode == HttpStatusCode.Conflict)
+		//		{
+		//			var error = await response.Content.ReadFromJsonAsync<ErrorResponse>(cancellationToken: cancellationToken);
+		//			throw new MyShopApiException(error!);
+		//		}
+		//		else if (response.StatusCode == HttpStatusCode.BadRequest)
+		//		{
+		//			var details = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>(cancellationToken: cancellationToken);
+		//			throw new MyShopApiException(response.StatusCode, details!);
+		//		}
+		//		else
+		//		{
+		//			throw new MyShopApiException("Unknown Error!");
+		//		}
+		//	}
+
+		//}
+
+		//public async Task<LoginResponse> Login(LoginRequest request, CancellationToken cancellationToken)
+		//{
+		//	ArgumentNullException.ThrowIfNull(request);
+
+		//	const string uri = "account/login";
+		//	using var response = await _httpClient.PostAsJsonAsync(uri, request, cancellationToken);
+		//	if (!response.IsSuccessStatusCode)
+		//	{
+		//		switch (response.StatusCode)
+		//		{
+		//			case HttpStatusCode.Conflict:
+		//				{
+		//					var error = await response.Content.ReadFromJsonAsync<ErrorResponse>(cancellationToken: cancellationToken);
+		//					throw new MyShopApiException(error!);
+		//				}
+
+		//			case HttpStatusCode.BadRequest:
+		//				{
+		//					var details = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>(cancellationToken: cancellationToken);
+		//					throw new MyShopApiException(response.StatusCode, details!);
+		//				}
+
+		//			default:
+		//				throw new MyShopApiException($"Unknown Error! {response.StatusCode}");
+		//		}
+
+		//	}
+
+		//	var loginResponse = await response.Content.ReadFromJsonAsync<LoginResponse>(cancellationToken: cancellationToken);
+		//	return loginResponse!;
+		//}
+
+		public async Task Register(RegisterRequest request, CancellationToken cancellationToken)
+		{
 			var uri = "/account/register";
-			using var response = await _httpClient.PostAsJsonAsync(uri, request, cancellationToken);
-			if(!response.IsSuccessStatusCode)
+			try
 			{
-				if(response.StatusCode == HttpStatusCode.Conflict)
-				{
-					var error = await response.Content.ReadFromJsonAsync<ErrorResponse>(cancellationToken: cancellationToken);
-					throw new MyShopApiException(error!);
-				} else if(response.StatusCode == HttpStatusCode.BadRequest)
-				{
-					var details = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>(cancellationToken: cancellationToken);
-					throw new MyShopApiException(response.StatusCode ,details!);
-				} else
-				{
-					throw new MyShopApiException("Unknown Error!");
-				}
+				await PostAsJsonAndDeserializeAsync<RegisterRequest, LoginResponse>(uri, request, cancellationToken);
 			}
-			
-        }
+			catch (MyShopApiException ex)
+			{
+				throw;
+			}
+		}
 
 		public async Task<LoginResponse> Login(LoginRequest request, CancellationToken cancellationToken)
 		{
-			ArgumentNullException.ThrowIfNull(request);
-
 			const string uri = "account/login";
-			using var response = await _httpClient.PostAsJsonAsync(uri, request, cancellationToken);
-			if(!response.IsSuccessStatusCode)
+			try
 			{
-				switch (response.StatusCode)
-				{
-					case HttpStatusCode.Conflict:
-						{
-							var error = await response.Content.ReadFromJsonAsync<ErrorResponse>(cancellationToken: cancellationToken);
-							throw new MyShopApiException(error!);
-						}
-
-					case HttpStatusCode.BadRequest:
-						{
-							var details = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>(cancellationToken: cancellationToken);
-							throw new MyShopApiException(response.StatusCode, details!);
-						}
-
-					default:
-						throw new MyShopApiException($"Unknown Error! {response.StatusCode}");
-				}
-
+				return await PostAsJsonAndDeserializeAsync<LoginRequest, LoginResponse>(uri, request, cancellationToken);
 			}
-
-			var loginResponse = await response.Content.ReadFromJsonAsync<LoginResponse>(cancellationToken: cancellationToken);
-			return loginResponse!;
+			catch (MyShopApiException ex)
+			{
+				throw;
+			}
 		}
 
-        public void Dispose()
+		public async Task<TResponse> PostAsJsonAndDeserializeAsync<TRequest, TResponse>(
+		string uri,
+		TRequest request,
+		CancellationToken cancellationToken)
+		{
+			ArgumentNullException.ThrowIfNull(request);
+
+			using var response = await _httpClient.PostAsJsonAsync(uri, request, cancellationToken);
+
+			if (!response.IsSuccessStatusCode)
+			{
+				if (response.StatusCode == HttpStatusCode.Conflict)
+				{
+					var error = await response.Content.ReadFromJsonAsync<ErrorResponse>(cancellationToken: cancellationToken);
+					throw new MyShopApiException(error!);
+				}
+				else if (response.StatusCode == HttpStatusCode.BadRequest)
+				{
+					var details = await response.Content.ReadFromJsonAsync<ValidationProblemDetails>(cancellationToken: cancellationToken);
+					throw new MyShopApiException(response.StatusCode, details!);
+				}
+				else
+				{
+					throw new MyShopApiException($"Unknown Error! {response.StatusCode}");
+				}
+			}
+
+			
+			var responseData = await response.Content.ReadFromJsonAsync<TResponse>(cancellationToken: cancellationToken);
+			return responseData!;
+		}
+
+
+		public void Dispose()
 		{
 			((IDisposable)_httpClient).Dispose();
 		}

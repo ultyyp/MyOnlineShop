@@ -1,78 +1,92 @@
 ﻿@page "/login"
 @using OnlineShop.Frontend.Components
 @using System.ComponentModel.DataAnnotations
-@using OnlineShop.Frontend.Dialogs;
+@using OnlineShop.HttpApiClient.Entities;
+@using OnlineShop.HttpApiClient;
+@using OnlineShop.Frontend.Interfaces;
+@using OnlineShop.HttpModels.Requests;
+
+@inject IMyShopClient Client
 @inject IDialogService DialogService
+@inject NavigationManager NavigationManager
+@inject ISnackbar Snackbar
 
 <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
-    <DataAnnotationsValidator />
-    <MudGrid>
-        <MudItem xs="12" sm="7">
-            <MudCard>
-                <MudCardContent>
-                    <MudTextField Label="Email" Class="mt-3"
-                    @bind-Value="model.Email" For="@(() => model.Email)" />
-                    <MudTextField Label="Password" HelperText="Choose a strong password" Class="mt-3"
-                    @bind-Value="model.Password" For="@(() => model.Password)" InputType="InputType.Password" />
-                </MudCardContent>
-                <MudCardActions>
-                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Login</MudButton>
-                </MudCardActions>
-            </MudCard>
-        </MudItem>
-        <MudItem xs="12" sm="5">
-            <MudPaper Class="pa-4 mud-height-full">
-                <MudText Typo="Typo.subtitle2">Validation Summary</MudText>
-                @if (success)
-                {
-                    <MudText Color="Color.Success">Success</MudText>
-                }
-                else
-                {
-                    <MudText Color="@Color.Error">
-                        <ValidationSummary />
-                    </MudText>
-                }
-            </MudPaper>
-        </MudItem>
-        <MudItem xs="12">
-            <MudText Typo="Typo.body2" Align="Align.Center">
-                Don't Have An Account Yet? 
-                <MudButton OnClick="@OpenRegisterWindow" Typo="Typo.body2" Color="Color.Inherit"><b>Register</b></MudButton>
-            </MudText>
-            
-        </MudItem>
-    </MudGrid>
+	<DataAnnotationsValidator />
+	<MudGrid>
+		<MudItem Style="width: 3000px;">
+			<MudCard>
+				<MudCardContent>
+					<MudTextField Label="Email" Class="mt-3"
+					@bind-Value="model.Email" For="@(() => model.Email)" />
+					<MudTextField Label="Password" HelperText="Choose a strong password" Class="mt-3"
+					@bind-Value="model.Password" For="@(() => model.Password)" InputType="InputType.Password" />
+				</MudCardContent>
+				<MudCardActions>
+					<MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Login</MudButton>
+				</MudCardActions>
+			</MudCard>
+		</MudItem>
+		<MudItem>
+			@if (_loginInProgress)
+			{
+				<MudProgressLinear Color="Color.Primary" Indeterminate="true" />
+			}
+		</MudItem>
+	</MudGrid>
 </EditForm>
 
 @code {
-    LoginAccountForm model = new LoginAccountForm();
-    bool success;
+	LoginRequest model = new LoginRequest();
+	bool _loginInProgress;
 
-    public class LoginAccountForm
-    {
-        [Required]
-        [EmailAddress]
-        public string Email { get; set; }
 
-        [Required]
-        [StringLength(30, ErrorMessage = "Password must be at least 8 characters long.", MinimumLength = 8)]
-        public string Password { get; set; }
-    }
+	private async Task OnValidSubmit(EditContext context)
+	{
+		if (_loginInProgress)
+		{
+			Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomLeft;
+			Snackbar.Add("Login in progress...", Severity.Info);
+			return;
+		}
 
-    private void OnValidSubmit(EditContext context)
-    {
-        success = true;
-        StateHasChanged();
-    }
+		_loginInProgress = true;
 
-    private void OpenRegisterWindow()
-    {
-        var options = new DialogOptions { CloseOnEscapeKey = true };
-        DialogService.Show<RegisterDialog>("Register", options);
-    }
+		try
+		{
+			await Client.Login(new LoginRequest()
+				{
+					Email = model.Email,
+					Password = model.Password
+				}, default);
 
+			StateHasChanged();
+			NavigationManager.NavigateTo("/catalog");
+
+			await DialogService.ShowMessageBox(
+				"Success!",
+				"Login complete.",
+				yesText: "OK"
+			);
+		}
+		catch (MyShopApiException e)
+		{
+			_loginInProgress = false;
+			await DialogService.ShowMessageBox("Error!", e.Message, yesText: "OK");
+		}
+		finally
+		{
+			_loginInProgress = false;
+		}
+
+	}
 }
+
+
+
+
+
+
 
 
 

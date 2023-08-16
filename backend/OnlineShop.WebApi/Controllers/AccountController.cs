@@ -31,7 +31,7 @@ namespace OnlineShop.WebApi.Controllers
                 return Conflict(new ErrorResponse("Email Already Registered!"));
             }
             
-            return Ok();
+            return Ok("Registered");
         }
 
 
