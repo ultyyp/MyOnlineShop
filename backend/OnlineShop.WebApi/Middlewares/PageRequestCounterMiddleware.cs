@@ -9,7 +9,6 @@ namespace OnlineShop.WebApi.Middlewares
 	public class PageRequestCounterMiddleware
 	{
 		private readonly RequestDelegate _next;
-		private readonly ILogger<PageRequestCounterMiddleware> _logger;
 		private readonly IPageRequestCounterService _counterService;
 
 		public PageRequestCounterMiddleware(RequestDelegate next,
@@ -17,16 +16,13 @@ namespace OnlineShop.WebApi.Middlewares
 			IPageRequestCounterService counterService)
 		{
 			_next = next ?? throw new ArgumentNullException(nameof(next));
-			_logger = logger ?? throw new ArgumentNullException(nameof(logger));
 			_counterService = counterService ?? throw new ArgumentNullException(nameof(counterService));
 		}
 
 		public async Task InvokeAsync(HttpContext context)
 		{
 			string domain = context.Request.Path;
-			
-			_counterService.DomainRequestCounterDictionary.AddOrUpdate(domain, 1, (_, existing) => existing + 1);
-
+			_counterService.AddOrIncrementRequest(domain);
 			await _next(context);
 		}
 	}

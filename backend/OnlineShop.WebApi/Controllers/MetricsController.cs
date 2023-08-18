@@ -18,7 +18,7 @@ namespace OnlineShop.WebApi.Controllers
 		[HttpGet("get_pathcounter")]
 		public ConcurrentDictionary<string, int> GetDomainRequestCount()
 		{
-			return _counterService.DomainRequestCounterDictionary;
+			return _counterService.GetRequests();
 		}
 	}
 }
