@@ -5,7 +5,7 @@ namespace OnlineShop.Domain.Services
 {
 	public class PageRequestCounterService : IPageRequestCounterService
 	{
-		private ConcurrentDictionary<string, int> _domainRequestCounterDictionary = new ConcurrentDictionary<string, int>();
+		private readonly ConcurrentDictionary<string, int> _domainRequestCounterDictionary = new ConcurrentDictionary<string, int>();
 
 		public ConcurrentDictionary<string, int> GetRequests()
 		{
