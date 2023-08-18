@@ -27,13 +27,6 @@ namespace OnlineShop.WebApi.Middlewares
 			
 			_counterService.DomainRequestCounterDictionary.AddOrUpdate(domain, 1, (_, existing) => existing + 1);
 
-			//_logger.LogInformation($"Logging Domain Dictionary:");
-			//foreach (var kvp in _counterService.DomainRequestCounterDictionary)
-			//{
-			//	_logger.LogInformation($"{kvp.Key}: {kvp.Value}");
-			//}
-			//_logger.LogInformation($"Finished Logging Domain Dictionary.");
-
 			await _next(context);
 		}
 	}

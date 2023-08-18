@@ -44,20 +44,6 @@ var app = builder.Build();
 
 app.UseMiddleware<PathRequestCounterMiddleware>();
 
-//app.Use(async (context, next) =>
-//{
-//	var loggerFactory = context.RequestServices.GetRequiredService<ILoggerFactory>();
-//	var logger = loggerFactory.CreateLogger("Request");
-//	logger.LogInformation("Logger Initialised.");
-//	logger.LogInformation("Method: {ContextRequestMethod}", context.Request.Method);
-//	logger.LogInformation("Status Code Before: {StatusCode}", context.Response.StatusCode);
-
-//	await next();
-
-//	logger.LogInformation("Status Code After: {StatusCode}", context.Response.StatusCode);
-
-//});
-
 
 app.UseCors(policy =>
 {
