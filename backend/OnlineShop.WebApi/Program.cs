@@ -42,7 +42,7 @@ builder.Services.AddDbContext<AppDbContext>(
 
 var app = builder.Build();
 
-app.UseMiddleware<PathRequestCounterMiddleware>();
+app.UseMiddleware<PageRequestCounterMiddleware>();
 
 
 app.UseCors(policy =>

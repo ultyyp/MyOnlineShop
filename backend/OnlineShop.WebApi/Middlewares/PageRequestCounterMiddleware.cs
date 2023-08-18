@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace OnlineShop.WebApi.Middlewares
 {
-	public class PathRequestCounterMiddleware
+	public class PageRequestCounterMiddleware
 	{
 		private readonly RequestDelegate _next;
-		private readonly ILogger<PathRequestCounterMiddleware> _logger;
+		private readonly ILogger<PageRequestCounterMiddleware> _logger;
 		private readonly IPageRequestCounterService _counterService;
 
-		public PathRequestCounterMiddleware(RequestDelegate next,
-			ILogger<PathRequestCounterMiddleware> logger,
+		public PageRequestCounterMiddleware(RequestDelegate next,
+			ILogger<PageRequestCounterMiddleware> logger,
 			IPageRequestCounterService counterService)
 		{
 			_next = next ?? throw new ArgumentNullException(nameof(next));
