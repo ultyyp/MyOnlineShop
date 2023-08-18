@@ -1,12 +1,14 @@
 ﻿using OnlineShop.HttpApiClient.Entities;
 using OnlineShop.HttpModels.Requests;
 using OnlineShop.HttpModels.Responses;
+using System.Collections.Concurrent;
 
 namespace OnlineShop.HttpApiClient
 {
     public interface IMyShopClient
     {
-        Task AddProduct(Product product, CancellationToken cancellationToken);
+        Task<ConcurrentDictionary<string, int>> GetMetricsPathCounter(CancellationToken cancellationToken);
+		Task AddProduct(Product product, CancellationToken cancellationToken);
         Task DeleteProduct(Guid id, CancellationToken cancellationToken);
         Task<Product> GetProduct(Guid id, CancellationToken cancellationToken);
         Task<List<Product>> GetProducts(CancellationToken cancellationToken);

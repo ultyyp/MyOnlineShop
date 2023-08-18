@@ -5,6 +5,8 @@ using OnlineShop.Data.EntityFramework.Repositories;
 using OnlineShop.Domain.Services;
 using Microsoft.AspNetCore.Identity;
 using IdentityPasswordHasherLib;
+using Microsoft.AspNetCore.HttpLogging;
+using OnlineShop.WebApi.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +24,16 @@ builder.Services.AddScoped<IProductRepository, ProductRepositoryEf>();
 builder.Services.AddScoped<IAccountRepository, AccountRepositoryEf>();
 builder.Services.AddScoped<AccountService>();
 builder.Services.AddSingleton<IApplicationPasswordHasher, IdentityPasswordHasher>();
+builder.Services.AddSingleton<IPageRequestCounterService, PageRequestCounterService>();
+
+//Logging
+builder.Services.AddHttpLogging(options =>
+{
+	options.LoggingFields = HttpLoggingFields.RequestHeaders |
+							HttpLoggingFields.RequestBody |
+							HttpLoggingFields.ResponseHeaders |
+							HttpLoggingFields.ResponseBody;
+});
 
 var dbPath = "myapp.db";
 builder.Services.AddDbContext<AppDbContext>(
@@ -29,6 +41,23 @@ builder.Services.AddDbContext<AppDbContext>(
 
 
 var app = builder.Build();
+
+app.UseMiddleware<PathRequestCounterMiddleware>();
+
+//app.Use(async (context, next) =>
+//{
+//	var loggerFactory = context.RequestServices.GetRequiredService<ILoggerFactory>();
+//	var logger = loggerFactory.CreateLogger("Request");
+//	logger.LogInformation("Logger Initialised.");
+//	logger.LogInformation("Method: {ContextRequestMethod}", context.Request.Method);
+//	logger.LogInformation("Status Code Before: {StatusCode}", context.Response.StatusCode);
+
+//	await next();
+
+//	logger.LogInformation("Status Code After: {StatusCode}", context.Response.StatusCode);
+
+//});
+
 
 app.UseCors(policy =>
 {

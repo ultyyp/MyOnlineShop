@@ -1,0 +1,44 @@
+﻿@page "/metrics"
+@using OnlineShop.Frontend.Components
+@using OnlineShop.HttpApiClient;
+@using System.Collections.Concurrent;
+
+@inject IMyShopClient MyShopClient
+
+<div style="background-color:beige; border-radius:5px; padding:50px;">
+	<h1 style="text-align:center;">Shop Metrics</h1>
+	<hr style="height:3px; background-color:black; border:none; margin-bottom:15px;" />
+	<MudGrid>
+		@if(_dictionary is null)
+		{
+			<div style="margin:5px;">Loading...</div>
+			<MudProgressCircular Color="Color.Default" Indeterminate="true" />
+		}
+		else
+		{
+			@foreach (var kvp in _dictionary)
+			{
+				<MudGrid>
+					<div style="margin:15px;">
+						<MudPaper>
+							URL="@kvp.Key" AMMOUNT="@kvp.Value""
+						</MudPaper>
+					</div>
+				</MudGrid>
+			}
+		}
+	</MudGrid>
+</div>
+
+
+
+@code{
+	private IReadOnlyDictionary<string, int> _dictionary;
+	private CancellationTokenSource _cts = new();
+
+	protected override async Task OnInitializedAsync()
+	{
+		_dictionary = await MyShopClient.GetMetricsPathCounter(_cts.Token);
+	}
+}
+
