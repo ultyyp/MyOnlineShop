@@ -12,7 +12,6 @@ namespace OnlineShop.WebApi.Middlewares
 		private readonly IPageRequestCounterService _counterService;
 
 		public PageRequestCounterMiddleware(RequestDelegate next,
-			ILogger<PageRequestCounterMiddleware> logger,
 			IPageRequestCounterService counterService)
 		{
 			_next = next ?? throw new ArgumentNullException(nameof(next));
