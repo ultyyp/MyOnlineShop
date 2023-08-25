@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OnlineShop.Domain.Entities;
 using OnlineShop.Domain.Interfaces;
+using OnlineShop.HttpModels.Responses;
 using System.Collections.Concurrent;
 
 namespace OnlineShop.WebApi.Controllers
 {
-	[ApiController]
+    [ApiController]
 	[Route("metrics")]
 	public class MetricsController : ControllerBase
 	{
@@ -16,9 +18,11 @@ namespace OnlineShop.WebApi.Controllers
 		}
 
 		[HttpGet("get_pathcounter")]
-		public ConcurrentDictionary<string, int> GetDomainRequestCount()
+		public IReadOnlyList<PageCounterResponse> GetDomainRequestCount()
 		{
-			return _counterService.GetRequests();
+			var requests = _counterService.GetRequests();
+			var list = new List<PageCounterResponse>(requests.Select(req => new PageCounterResponse(req.Domain, req.Count)));
+			return list;
 		}
 	}
 }

@@ -16,7 +16,7 @@ namespace OnlineShop.Domain.Services
 		}
 
 
-        public async Task<Account> Register(string name, string email, string password, CancellationToken cancellationToken)
+        public virtual async Task<Account> Register(string name, string email, string password, CancellationToken cancellationToken)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException($"'{nameof(name)}' cannot be null or whitespace.", nameof(name));
@@ -38,7 +38,7 @@ namespace OnlineShop.Domain.Services
             
         }
 
-        public async Task<Account> Login(string email, string password, CancellationToken cancellationToken)
+        public virtual async Task<Account> Login(string email, string password, CancellationToken cancellationToken)
         {
             ArgumentNullException.ThrowIfNull(email);
             ArgumentNullException.ThrowIfNull(password);
@@ -74,6 +74,11 @@ namespace OnlineShop.Domain.Services
         {
             var hashedPassword = _hasher.HashPassword(password);
             return hashedPassword;
+        }
+
+        public async Task<Account> GetAccountById(Guid guid, CancellationToken cancellationToken)
+        {
+            return await _accountRepository.GetById(guid, cancellationToken);
         }
     }
 }

@@ -1,9 +1,13 @@
-﻿using OnlineShop.HttpApiClient.Entities;
+﻿using Newtonsoft.Json.Linq;
+using OnlineShop.HttpApiClient.Entities;
 using OnlineShop.HttpModels.Requests;
 using OnlineShop.HttpModels.Responses;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Net;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using static System.Net.WebRequestMethods;
 
 namespace OnlineShop.HttpApiClient
 {
@@ -81,33 +85,23 @@ namespace OnlineShop.HttpApiClient
 		public async Task Register(RegisterRequest request, CancellationToken cancellationToken)
 		{
 			var uri = "/account/register";
-			try
-			{
-				await PostAsJsonAndDeserializeAsync<RegisterRequest, RegisterResponse>(uri, request, cancellationToken);
-			}
-			catch (MyShopApiException ex)
-			{
-				throw;
-			}
+			await PostAsJsonAndDeserializeAsync<RegisterRequest, RegisterResponse>(uri, request, cancellationToken);
 		}
 
 		public async Task<LoginResponse> Login(LoginRequest request, CancellationToken cancellationToken)
 		{
 			const string uri = "account/login";
-			try
-			{
-				return await PostAsJsonAndDeserializeAsync<LoginRequest, LoginResponse>(uri, request, cancellationToken);
-			}
-			catch (MyShopApiException ex)
-			{
-				throw;
-			}
+			var response = await PostAsJsonAndDeserializeAsync<LoginRequest, LoginResponse>(uri, request, cancellationToken);
+			var headerValue = new AuthenticationHeaderValue("Bearer", response.Token);
+			_httpClient.DefaultRequestHeaders.Authorization = headerValue;
+			return response;
 		}
 
-		public async Task<ConcurrentDictionary<string, int>> GetMetricsPathCounter(CancellationToken cancellationToken)
+		public async Task<IReadOnlyList<PageCounterResponse>> GetMetricsPathCounter(CancellationToken cancellationToken)
 		{
 			const string uri = "metrics/get_pathcounter";
-			return await _httpClient.GetFromJsonAsync<ConcurrentDictionary<string, int>>(uri, cancellationToken);
+			List<PageCounterResponse>? response = await _httpClient.GetFromJsonAsync<List<PageCounterResponse>>(uri, cancellationToken);
+			return response;
 		}
 
 		public async Task<TResponse> PostAsJsonAndDeserializeAsync<TRequest, TResponse>(
@@ -152,3 +146,5 @@ namespace OnlineShop.HttpApiClient
         
     }
 }
+
+

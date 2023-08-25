@@ -1,10 +1,11 @@
-﻿using System.Collections.Concurrent;
+﻿using OnlineShop.Domain.Entities;
+using System.Collections.Concurrent;
 
 namespace OnlineShop.Domain.Interfaces
 {
 	public interface IPageRequestCounterService
 	{
-		ConcurrentDictionary<string, int> GetRequests();
-		void AddOrIncrementRequest(string domain);
+		IReadOnlyList<PageCounter> GetRequests();
+		Task AddOrIncrementRequest(string domain);
 	}
 }

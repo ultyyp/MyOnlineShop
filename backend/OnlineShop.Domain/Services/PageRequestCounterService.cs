@@ -1,4 +1,5 @@
-﻿using OnlineShop.Domain.Interfaces;
+﻿using OnlineShop.Domain.Entities;
+using OnlineShop.Domain.Interfaces;
 using System.Collections.Concurrent;
 
 namespace OnlineShop.Domain.Services
@@ -7,14 +8,16 @@ namespace OnlineShop.Domain.Services
 	{
 		private readonly ConcurrentDictionary<string, int> _domainRequestCounterDictionary = new ConcurrentDictionary<string, int>();
 
-		public ConcurrentDictionary<string, int> GetRequests()
+		public IReadOnlyList<PageCounter> GetRequests()
 		{
-			return _domainRequestCounterDictionary;
+			var list = new List<PageCounter>(_domainRequestCounterDictionary.Select(kvp => new PageCounter(kvp.Key, kvp.Value)));
+			return list;
 		}
 
-		public void AddOrIncrementRequest(string domain)
+		public Task AddOrIncrementRequest(string domain)
 		{
 			_domainRequestCounterDictionary.AddOrUpdate(domain, 1, (_, existing) => existing + 1);
+			return Task.CompletedTask;
 		}
 	}
 }

@@ -2,6 +2,7 @@
 @using OnlineShop.Frontend.Components
 @using OnlineShop.HttpApiClient;
 @using System.Collections.Concurrent;
+@using OnlineShop.HttpModels.Responses;
 
 @inject IMyShopClient MyShopClient
 
@@ -9,19 +10,19 @@
 	<h1 style="text-align:center;">Shop Metrics</h1>
 	<hr style="height:3px; background-color:black; border:none; margin-bottom:15px;" />
 	<MudGrid>
-		@if(_dictionary is null)
+		@if(_list is null)
 		{
 			<div style="margin:5px;">Loading...</div>
 			<MudProgressCircular Color="Color.Default" Indeterminate="true" />
 		}
 		else
 		{
-			@foreach (var kvp in _dictionary)
+			@foreach (var res in _list)
 			{
 				<MudGrid>
 					<div style="margin:15px;">
 						<MudPaper>
-							URL="@kvp.Key" AMMOUNT="@kvp.Value""
+							URL="@res.Domain" AMMOUNT="@res.Count"
 						</MudPaper>
 					</div>
 				</MudGrid>
@@ -33,12 +34,12 @@
 
 
 @code{
-	private IReadOnlyDictionary<string, int> _dictionary;
+	private IReadOnlyList<PageCounterResponse> _list;
 	private CancellationTokenSource _cts = new();
 
 	protected override async Task OnInitializedAsync()
 	{
-		_dictionary = await MyShopClient.GetMetricsPathCounter(_cts.Token);
+		_list = await MyShopClient.GetMetricsPathCounter(_cts.Token);
 	}
 }
 

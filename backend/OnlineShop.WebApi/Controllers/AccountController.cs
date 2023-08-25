@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OnlineShop.Domain.Entities;
 using OnlineShop.Domain.Exceptions;
 using OnlineShop.Domain.Services;
 using OnlineShop.HttpModels.Requests;
 using OnlineShop.HttpModels.Responses;
+using OnlineShop.WebApi.Services;
+using System.Security.Claims;
 
 namespace OnlineShop.WebApi.Controllers
 {
@@ -12,10 +15,12 @@ namespace OnlineShop.WebApi.Controllers
     public class AccountController : ControllerBase
     {
         private readonly AccountService _accountService;
+		private readonly ITokenService _tokenService;
 
-        public AccountController(AccountService accountService)
+		public AccountController(AccountService accountService, ITokenService tokenService)
         {
             _accountService = accountService ?? throw new ArgumentNullException(nameof(accountService));
+			_tokenService = tokenService ?? throw new ArgumentNullException(nameof(tokenService));
         }
 
 
@@ -44,7 +49,8 @@ namespace OnlineShop.WebApi.Controllers
 			try
 			{
 				var account = await _accountService.Login(request.Email, request.Password, cancellationToken);
-				return new LoginResponse(account.Id, account.Name);
+				var token = _tokenService.GenerateToken(account);
+				return new LoginResponse(account.Id, account.Name, token);
 			}
 			catch (AccountNotFoundException)
 			{
@@ -54,6 +60,16 @@ namespace OnlineShop.WebApi.Controllers
 			{
 				return Conflict(new ErrorResponse("Incorrect Password!"));
 			}
+		}
+
+		[Authorize]
+		[HttpGet("current")]
+		public async Task<ActionResult<AccountResponse>> GetCurrentAccount(CancellationToken cancellationToken)
+		{
+			var strId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+			var guid = Guid.Parse(strId);
+			var account = await _accountService.GetAccountById(guid, cancellationToken);
+			return new AccountResponse(account.Id, account.Name, account.Email);
 		}
 	}
 }
