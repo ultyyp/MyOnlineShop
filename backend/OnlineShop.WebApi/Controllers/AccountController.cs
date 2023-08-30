@@ -31,7 +31,8 @@ namespace OnlineShop.WebApi.Controllers
             try
             {
 				var account = await _accountService.Register(request.Name, request.Email, request.Password, cancellationToken);
-				return new RegisterResponse(account.Id, account.Name);
+				var token = _tokenService.GenerateToken(account);
+				return new RegisterResponse(account.Id, account.Name, token);
 			}
             catch (EmailAlreadyExistsException)
             {

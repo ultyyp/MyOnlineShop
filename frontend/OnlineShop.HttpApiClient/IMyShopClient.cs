@@ -13,7 +13,11 @@ namespace OnlineShop.HttpApiClient
         Task<Product> GetProduct(Guid id, CancellationToken cancellationToken);
         Task<List<Product>> GetProducts(CancellationToken cancellationToken);
         Task UpdateProduct(Product product, Guid id, CancellationToken cancellationToken);
-        Task Register(RegisterRequest request, CancellationToken cancellationToken);
+        Task<RegisterResponse> Register(RegisterRequest request, CancellationToken cancellationToken);
         Task<LoginResponse> Login(LoginRequest request, CancellationToken cancellationToken);
-    }
+		public bool IsAuthorizationTokenSet { get; }
+        public void SetAuthorizationToken(string token);
+        public void ResetAuthorizationToken();
+        public Task<AccountResponse> GetCurrentAccount(CancellationToken cancellationToken);
+	}
 }

@@ -1,4 +1,5 @@
 ﻿@page "/login"
+@using Blazored.LocalStorage;
 @using OnlineShop.Frontend.Components
 @using System.ComponentModel.DataAnnotations
 @using OnlineShop.Frontend.Dialogs;
@@ -7,10 +8,12 @@
 @using OnlineShop.Frontend.Interfaces;
 @using OnlineShop.HttpModels.Requests;
 
-@inject IMyShopClient Client
+@inherits AppComponentBase
+
 @inject IDialogService DialogService
 @inject NavigationManager NavigationManager
 @inject ISnackbar Snackbar
+
 
 <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
 	<DataAnnotationsValidator />
@@ -62,11 +65,15 @@
 
 		try
 		{
-			await Client.Login(new LoginRequest()
-				{
-					Email = model.Email,
-					Password = model.Password
-				}, default);
+			var response = await Client.Login(new LoginRequest()
+			{
+				Email = model.Email,
+				Password = model.Password
+			}, default);
+
+			await LocalStorage.SetItemAsync("token", response.Token);
+
+
 
 			StateHasChanged();
 			NavigationManager.NavigateTo("/catalog");

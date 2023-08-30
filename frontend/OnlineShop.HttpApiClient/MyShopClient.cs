@@ -82,10 +82,11 @@ namespace OnlineShop.HttpApiClient
 			response.EnsureSuccessStatusCode();
 		}
 
-		public async Task Register(RegisterRequest request, CancellationToken cancellationToken)
+		public async Task<RegisterResponse> Register(RegisterRequest request, CancellationToken cancellationToken)
 		{
 			var uri = "/account/register";
-			await PostAsJsonAndDeserializeAsync<RegisterRequest, RegisterResponse>(uri, request, cancellationToken);
+			var response = await PostAsJsonAndDeserializeAsync<RegisterRequest, RegisterResponse>(uri, request, cancellationToken);
+			return response;
 		}
 
 		public async Task<LoginResponse> Login(LoginRequest request, CancellationToken cancellationToken)
@@ -95,6 +96,29 @@ namespace OnlineShop.HttpApiClient
 			var headerValue = new AuthenticationHeaderValue("Bearer", response.Token);
 			_httpClient.DefaultRequestHeaders.Authorization = headerValue;
 			return response;
+		}
+
+		public async Task<AccountResponse> GetCurrentAccount(CancellationToken cancellationToken)
+		{
+			var uri = "/account/current";
+			AccountResponse? response = await _httpClient.GetFromJsonAsync<AccountResponse>(uri, cancellationToken);
+			return response;
+		}
+
+		public bool IsAuthorizationTokenSet { get; private set; }
+
+		public void SetAuthorizationToken(string token)
+		{
+			if(token == null) throw new ArgumentNullException(nameof(token));
+			var headerValue = new AuthenticationHeaderValue("Bearer", token);
+			_httpClient.DefaultRequestHeaders.Authorization = headerValue;
+			IsAuthorizationTokenSet = true;
+		}
+
+		public void ResetAuthorizationToken()
+		{
+			_httpClient.DefaultRequestHeaders.Remove("Authorization");
+			IsAuthorizationTokenSet = false;
 		}
 
 		public async Task<IReadOnlyList<PageCounterResponse>> GetMetricsPathCounter(CancellationToken cancellationToken)
