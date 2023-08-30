@@ -16,6 +16,7 @@
 		<MudText>Id: @_accountResponse.Id</MudText>
 		<MudText>Name: @_accountResponse.Name</MudText>
 		<MudText>Email: @_accountResponse.Email</MudText>
+		<MudButton OnClick="Logout">Logout</MudButton>
 	}
 </div>
 
@@ -27,6 +28,11 @@
 	{
 		await base.OnInitializedAsync();
 		_accountResponse = await Client.GetCurrentAccount(_cts.Token);
+	}
+
+	private void Logout()
+	{
+		Client.ResetAuthorizationToken();
 	}
 }
 
