@@ -8,7 +8,7 @@
 	<hr style="height:3px; background-color:black; border:none; margin-bottom:15px;" />
 	@if (_accountResponse is null)
 	{
-		<div style="margin:5px;">Please Login!</div>
+		<h1 style="margin:5px;">Please Login!</h1>
 	}
 	else
 	{
@@ -20,7 +20,7 @@
 </div>
 
 @code{
-	private AccountResponse _accountResponse;
+	private AccountResponse? _accountResponse;
 	private CancellationTokenSource _cts = new();
 
 	protected override async Task OnInitializedAsync()
