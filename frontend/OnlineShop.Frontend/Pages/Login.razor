@@ -15,6 +15,13 @@
 @inject ISnackbar Snackbar
 
 
+@if(Client.IsAuthorizationTokenSet == true)
+{
+	<h1>Logged In</h1>
+}
+else
+{
+
 <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
 	<DataAnnotationsValidator />
 	<MudGrid>
@@ -47,6 +54,8 @@
 	</MudGrid>
 </EditForm>
 
+}
+
 @code {
 	LoginRequest model = new LoginRequest();
 	bool _loginInProgress;
@@ -72,17 +81,17 @@
 			}, default);
 
 			await LocalStorage.SetItemAsync("token", response.Token);
-
-
-
 			StateHasChanged();
-			NavigationManager.NavigateTo("/catalog");
 
 			await DialogService.ShowMessageBox(
 				"Success!",
 				"Login complete.",
 				yesText: "OK"
 			);
+
+			NavigationManager.NavigateTo("/profile");
+
+			
 		}
 		catch (MyShopApiException e)
 		{

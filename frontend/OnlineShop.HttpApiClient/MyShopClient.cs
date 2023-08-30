@@ -86,6 +86,7 @@ namespace OnlineShop.HttpApiClient
 		{
 			var uri = "/account/register";
 			var response = await PostAsJsonAndDeserializeAsync<RegisterRequest, RegisterResponse>(uri, request, cancellationToken);
+			SetAuthorizationToken(response.Token);
 			return response;
 		}
 
@@ -93,8 +94,7 @@ namespace OnlineShop.HttpApiClient
 		{
 			const string uri = "account/login";
 			var response = await PostAsJsonAndDeserializeAsync<LoginRequest, LoginResponse>(uri, request, cancellationToken);
-			var headerValue = new AuthenticationHeaderValue("Bearer", response.Token);
-			_httpClient.DefaultRequestHeaders.Authorization = headerValue;
+			SetAuthorizationToken(response.Token);
 			return response;
 		}
 

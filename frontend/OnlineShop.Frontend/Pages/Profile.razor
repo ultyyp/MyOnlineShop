@@ -3,10 +3,14 @@
 @using OnlineShop.HttpModels.Responses;
 @inherits AppComponentBase
 
+@inject NavigationManager NavigationManager
+@inject IDialogService DialogService
+
 <div style="background-color:beige; border-radius:5px; padding:50px;">
 	<h1 style="text-align:center;">Profile</h1>
 	<hr style="height:3px; background-color:black; border:none; margin-bottom:15px;" />
-	@if (_accountResponse is null)
+	
+	@if (_accountResponse is null && Client.IsAuthorizationTokenSet == false)
 	{
 		<h1 style="margin:5px;">Please Login!</h1>
 	}
@@ -17,6 +21,7 @@
 		<MudText>Email: @_accountResponse.Email</MudText>
 		<MudButton OnClick="Logout">Logout</MudButton>
 	}
+
 </div>
 
 @code{
@@ -34,6 +39,13 @@
 	{
 		Client.ResetAuthorizationToken();
 		await ClearToken();
+		StateHasChanged();
+		await DialogService.ShowMessageBox(
+				"Success!",
+				"Logged out.",
+				yesText: "OK"
+			);
+		NavigationManager.NavigateTo("login");
 	}
 }
 

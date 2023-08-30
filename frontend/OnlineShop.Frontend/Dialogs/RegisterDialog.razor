@@ -1,11 +1,12 @@
 ﻿@using OnlineShop.Frontend.Components
 @using System.ComponentModel.DataAnnotations
+@using OnlineShop.Frontend.Pages;
 @using OnlineShop.HttpApiClient.Entities;
 @using OnlineShop.HttpApiClient;
 @using OnlineShop.Frontend.Interfaces;
 @using OnlineShop.HttpModels.Requests;
+@inherits AppComponentBase
 
-@inject IMyShopClient Client
 @inject IDialogService DialogService
 @inject NavigationManager NavigationManager
 @inject ISnackbar Snackbar
@@ -57,7 +58,7 @@
 
 		try
 		{
-			await Client.Register(new RegisterRequest()
+			var response = await Client.Register(new RegisterRequest()
 			{
 				Name = model.Name,
 				Email = model.Email,
@@ -65,14 +66,18 @@
 				ConfirmedPassword = model.ConfirmedPassword
 			}, default);
 
+			await LocalStorage.SetItemAsync("token", response.Token);
 			StateHasChanged();
-			NavigationManager.NavigateTo("/login");
 
 			await DialogService.ShowMessageBox(
 				"Success!",
 				"Registration complete.",
 				yesText: "OK"
 			);
+
+			NavigationManager.NavigateTo("/profile");
+
+			
 		}
 		catch(MyShopApiException e)
 		{
