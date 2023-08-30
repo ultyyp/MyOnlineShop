@@ -8,8 +8,7 @@
 	<hr style="height:3px; background-color:black; border:none; margin-bottom:15px;" />
 	@if (_accountResponse is null)
 	{
-		<div style="margin:5px;">Loading...</div>
-		<MudProgressCircular Color="Color.Default" Indeterminate="true" />
+		<div style="margin:5px;">Please Login!</div>
 	}
 	else
 	{
@@ -27,12 +26,14 @@
 	protected override async Task OnInitializedAsync()
 	{
 		await base.OnInitializedAsync();
+		if(Client.IsAuthorizationTokenSet == false) { return; }
 		_accountResponse = await Client.GetCurrentAccount(_cts.Token);
 	}
 
-	private void Logout()
+	private async Task Logout()
 	{
 		Client.ResetAuthorizationToken();
+		await ClearToken();
 	}
 }
 
