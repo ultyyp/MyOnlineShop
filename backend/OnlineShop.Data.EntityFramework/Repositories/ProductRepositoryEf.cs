@@ -15,7 +15,7 @@ namespace OnlineShop.Data.EntityFramework.Repositories
             if (prod != null)
             {
                 Entities.Remove(prod);
-                await _dbContext.SaveChangesAsync();
+                //await _dbContext.SaveChangesAsync();
             }
             else
             {
@@ -29,7 +29,7 @@ namespace OnlineShop.Data.EntityFramework.Repositories
             if (prod != null)
             {
                 Entities.Entry(prod).CurrentValues.SetValues(product);
-                await _dbContext.SaveChangesAsync(cancellationToken);
+                //await _dbContext.SaveChangesAsync(cancellationToken);
             }
             else
             {

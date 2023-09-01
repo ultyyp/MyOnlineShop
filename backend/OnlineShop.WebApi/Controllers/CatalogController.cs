@@ -7,22 +7,23 @@ namespace OnlineShop.WebApi.Controllers
     [Route("catalog")]
     public class CatalogController : ControllerBase
     {
-        private readonly IProductRepository _productRepository;
-        public CatalogController(IProductRepository productRepository)
+        private readonly IUnitOfWork _uow;
+        public CatalogController(IUnitOfWork UOW)
         {
-            _productRepository = productRepository ?? throw new ArgumentNullException(nameof(productRepository));
+            _uow = UOW ?? throw new ArgumentNullException(nameof(UOW));
         }
 
         [HttpPost("add_product")]
         public async Task AddProduct([FromBody] Product product, CancellationToken cancellationToken)
         {
-            await _productRepository.Add(product, cancellationToken);
+            await _uow.ProductRepository.Add(product, cancellationToken);
+            await _uow.SaveChangesAsync();
         }
 
         [HttpGet("get_products")]
         public async Task<IReadOnlyList<Product>> GetProducts(CancellationToken cancellationToken)
         {
-            return await _productRepository.GetAll(cancellationToken);
+            return await _uow.ProductRepository.GetAll(cancellationToken);
         }
 
 
@@ -30,20 +31,22 @@ namespace OnlineShop.WebApi.Controllers
         [HttpGet("get_product")]
         public async Task<Product> GetProductById(Guid productId, CancellationToken cancellationToken)
         {
-            return await _productRepository.GetById(productId, cancellationToken);
+            return await _uow.ProductRepository.GetById(productId, cancellationToken);
         }
 
         [HttpPost("update_product")]
         public async Task UpdateProduct([FromQuery] Guid productId,[FromBody] Product product, CancellationToken cancellationToken)
         {
-            await _productRepository.UpdateProductById(productId, product, cancellationToken);
-        }
+            await _uow.ProductRepository.UpdateProductById(productId, product, cancellationToken);
+			await _uow.SaveChangesAsync();
+		}
 
         [HttpPost("delete_product")]
         public async Task DeleteProduct([FromQuery] Guid productId, CancellationToken cancellationToken)
         {
-            await _productRepository.DeleteProductById(productId, cancellationToken);
-        }
+            await _uow.ProductRepository.DeleteProductById(productId, cancellationToken);
+			await _uow.SaveChangesAsync();
+		}
 
     }
 

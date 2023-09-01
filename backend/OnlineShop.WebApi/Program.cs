@@ -84,6 +84,10 @@ builder.Services.AddAuthorization();
 //Database
 builder.Services.AddScoped<IProductRepository, ProductRepositoryEf>();
 builder.Services.AddScoped<IAccountRepository, AccountRepositoryEf>();
+builder.Services.AddScoped<ICartRepository, CartRepositoryEf>();
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWorkEf>();
+
 builder.Services.AddScoped<AccountService>();
 builder.Services.AddSingleton<IApplicationPasswordHasher, IdentityPasswordHasher>();
 builder.Services.AddSingleton<IPageRequestCounterService, PageRequestCounterService>();

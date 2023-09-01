@@ -2,7 +2,7 @@
 using OnlineShop.Domain.Interfaces;
 using System.Collections.Concurrent;
 
-namespace OnlineShop.Domain.Services
+namespace OnlineShop.WebApi.Services
 {
 	public class PageRequestCounterService : IPageRequestCounterService
 	{

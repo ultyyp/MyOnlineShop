@@ -14,6 +14,11 @@
 	{
 		<h1 style="margin:5px;">Please Login!</h1>
 	}
+	else if (_accountResponse is null && Client.IsAuthorizationTokenSet == true)
+	{
+		<div style="margin:5px;">Loading...</div>
+		<MudProgressCircular Color="Color.Default" Indeterminate="true" />
+	}
 	else
 	{
 		<MudText>Id: @_accountResponse.Id</MudText>

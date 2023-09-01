@@ -28,13 +28,16 @@ namespace OnlineShop.Data.EntityFramework.Repositories
         public virtual async Task Add(TEntity entity, CancellationToken cancellationToken)
         {
             await Entities.AddAsync(entity);
-            await _dbContext.SaveChangesAsync(cancellationToken);
+            //await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
         public virtual async Task Update(TEntity TEntity, CancellationToken cancellationToken)
         {
-            _dbContext.Entry(TEntity).State = EntityState.Modified;
-            await _dbContext.SaveChangesAsync(cancellationToken);
-        }
-    }
+			await Task.Run(() =>
+			{
+				_dbContext.Entry(TEntity).State = EntityState.Modified;
+			}, cancellationToken);
+			//await _dbContext.SaveChangesAsync(cancellationToken);
+		}
+	}
 }
