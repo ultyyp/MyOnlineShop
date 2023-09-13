@@ -1,4 +1,5 @@
 ﻿using OnlineShop.Domain.Interfaces;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 
@@ -9,8 +10,13 @@ namespace OnlineShop.Domain.Entities
         private string _name;
         private string _email;
         private string _hashedPassword;
+		private Role[]? _roles;
 
-        public Account(Guid id, string name, string email, string hashedPassword)
+		public Account()
+		{
+		}
+
+		public Account(Guid id, string name, string email, string hashedPassword, Role[] roles)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException($"'{nameof(name)}' cannot be null or whitespace.", nameof(name));
@@ -25,6 +31,7 @@ namespace OnlineShop.Domain.Entities
             _name = name;
             _email = email;
             _hashedPassword = hashedPassword;
+            _roles = roles;
         }
 
         public Guid Id { get; init; }
@@ -63,7 +70,17 @@ namespace OnlineShop.Domain.Entities
             }
         }
 
-        
+		public Role[] Roles
+		{
+			get => _roles;
+			set => _roles = value ?? throw new ArgumentNullException(nameof(value));
+		}
 
-    }
+		public void GrantRole(Role role)
+		{
+			if (!Enum.IsDefined(typeof(Role), role))
+				throw new InvalidEnumArgumentException(nameof(role), (int)role, typeof(Role));
+			Roles = Roles.Append(role).ToArray();
+		}
+	}
 }

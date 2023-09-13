@@ -28,9 +28,9 @@ namespace OnlineShop.WebApi.Controllers
         public async Task<ActionResult<RegisterResponse>> Register(RegisterRequest request,
             CancellationToken cancellationToken)
         {
-            try
-            {
-				var account = await _accountService.Register(request.Name, request.Email, request.Password, cancellationToken);
+			try
+			{
+				var account = await _accountService.Register(request.Name, request.Email, request.Password, new Role[] {Role.Customer}, cancellationToken);
 				var token = _tokenService.GenerateToken(account);
 				return new RegisterResponse(account.Id, account.Name, token);
 			}
@@ -71,6 +71,21 @@ namespace OnlineShop.WebApi.Controllers
 			var guid = Guid.Parse(strId);
 			var account = await _accountService.GetAccountById(guid, cancellationToken);
 			return new AccountResponse(account.Id, account.Name, account.Email);
+		}
+
+		// [Authorize(Roles = nameof(Role.Admin))]
+		[HttpGet("all")]
+		public async Task<ActionResult<Account[]>> GetAllAccounts(CancellationToken cancellationToken)
+		{
+			try
+			{
+				var products = await _accountService.GetAll(cancellationToken);
+				return Ok(products);
+			}
+			catch (ArgumentNullException e)
+			{
+				return Conflict(new ErrorResponse("Account not present!"));
+			}
 		}
 	}
 }

@@ -9,11 +9,35 @@ namespace OnlineShop.Domain.Entities
 {
 	public class Cart : IEntity
 	{
+		public Cart(Guid id, Guid accountId)
+		{
+			Id = id;
+			AccountId = accountId;
+			Items = new List<CartItem>();
+		}
+
 		public Guid Id { get; init; }
 		public Guid AccountId { get; set; }
 
 		//Reverse Navigation Property
 		public List<CartItem>? Items;
+
+		public void AddItem(Guid productId, double quantity)
+		{
+			if (quantity <= 0) { throw new ArgumentOutOfRangeException(nameof(quantity)); }
+			if (Items == null) { throw new InvalidOperationException("Cart items are null!"); }
+
+			var existingItem = Items!.SingleOrDefault(item => item.ProductId == productId);
+
+			if (existingItem is null)
+			{
+				Items!.Add(new Cart.CartItem(Guid.Empty, productId, quantity));
+			}
+			else
+			{
+				existingItem.Quantity += quantity;
+			}
+		}
 
 
 		public record CartItem : IEntity
@@ -36,6 +60,8 @@ namespace OnlineShop.Domain.Entities
 
 			//External Key To A Cart.Id
 			public Cart Cart { get; set; } = null!;
+
+			
 		}
 	}
 }

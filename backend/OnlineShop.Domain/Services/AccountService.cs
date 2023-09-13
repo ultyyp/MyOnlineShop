@@ -1,6 +1,7 @@
 ﻿using OnlineShop.Domain.Entities;
 using OnlineShop.Domain.Exceptions;
 using OnlineShop.Domain.Interfaces;
+using System.Data;
 
 namespace OnlineShop.Domain.Services
 {
@@ -16,7 +17,7 @@ namespace OnlineShop.Domain.Services
 		}
 
 
-        public virtual async Task<Account> Register(string name, string email, string password, CancellationToken cancellationToken)
+        public virtual async Task<Account> Register(string name, string email, string password, Role[] roles, CancellationToken cancellationToken)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException($"'{nameof(name)}' cannot be null or whitespace.", nameof(name));
@@ -30,15 +31,15 @@ namespace OnlineShop.Domain.Services
             if (accountExists is not null)
             {
                 throw new EmailAlreadyExistsException("Account with given email already exists.");
-            }
+			}
 
-            var account = new Account(Guid.Empty, name, email, EncryptPassword(password));
-            await _uow.AccountRepository.Add(account, cancellationToken);
-            //Add Cart
-            await _uow.SaveChangesAsync(cancellationToken);
+			Account account = new Account(Guid.NewGuid(), name, email, EncryptPassword(password), roles);
+			Cart cart = new(Guid.NewGuid(), account.Id);
+			await _uow.AccountRepository.Add(account, cancellationToken);
+			await _uow.CartRepository.Add(cart, cancellationToken);
+			await _uow.SaveChangesAsync(cancellationToken);
 
             return account;
-        
         }
 
         public virtual async Task<Account> Login(string email, string password, CancellationToken cancellationToken)
@@ -85,5 +86,10 @@ namespace OnlineShop.Domain.Services
         {
             return await _uow.AccountRepository.GetById(guid, cancellationToken);
         }
-    }
+
+		public async Task<IReadOnlyList<Account>>GetAll(CancellationToken cancellationToken)
+		{
+			return await _uow.AccountRepository.GetAll(cancellationToken);
+		}
+	}
 }
