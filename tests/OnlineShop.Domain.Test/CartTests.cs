@@ -9,7 +9,7 @@ namespace MyOnlineShop.Domain.Test
         {
             //Arrange
             var cart = new Cart(Guid.NewGuid(), Guid.NewGuid());    
-            var productId = Guid.NewGuid();
+            var productId = Guid.NewGuid(); //a
 
             //Act
             cart.AddItem(productId, 1);
