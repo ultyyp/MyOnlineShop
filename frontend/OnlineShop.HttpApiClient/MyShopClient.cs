@@ -30,7 +30,8 @@ namespace OnlineShop.HttpApiClient
 			{
 				_httpClient.BaseAddress = hostUri;
 			}
-		}
+            _httpClient.DefaultRequestHeaders.Add("Api-Key", "OnlineShopApiToken");
+        }
 
 
 		public async Task<Product> GetProduct(Guid id, CancellationToken cancellationToken = default)

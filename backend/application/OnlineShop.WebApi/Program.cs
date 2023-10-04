@@ -12,6 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 using OnlineShop.WebApi.Configurations;
 using OnlineShop.WebApi.Services;
 using Microsoft.OpenApi.Models;
+using OnlineShop.WebApi.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,7 +29,11 @@ builder.Services.AddSingleton(jwtConfig);
 builder.Services.AddSingleton<ITokenService, TokenService>();
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<CentralizedExceptionHandlingFilter>(order: 1);
+    options.Filters.Add<AuthentificationRequestFilter>(order: 0);
+});
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

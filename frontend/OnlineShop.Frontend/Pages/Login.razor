@@ -18,6 +18,7 @@
 @if(Client.IsAuthorizationTokenSet == true)
 {
 	<h1>Logged In</h1>
+	<MudButton OnClick="Logout">Log Out</MudButton>
 }
 else
 {
@@ -109,6 +110,19 @@ else
 	{
 		var options = new DialogOptions { CloseOnEscapeKey = true };
 		DialogService.Show<RegisterDialog>("Register", options);
+	}
+
+	private async Task Logout()
+	{
+		Client.ResetAuthorizationToken();
+		await ClearToken();
+		StateHasChanged();
+		await DialogService.ShowMessageBox(
+				"Success!",
+				"Logged out.",
+				yesText: "OK"
+			);
+		NavigationManager.NavigateTo("login");
 	}
 }
 
