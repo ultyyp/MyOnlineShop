@@ -120,6 +120,7 @@ namespace OnlineShop.HttpApiClient
 		{
 			_httpClient.DefaultRequestHeaders.Remove("Authorization");
 			IsAuthorizationTokenSet = false;
+
 		}
 
 		public async Task<IReadOnlyList<PageCounterResponse>> GetMetricsPathCounter(CancellationToken cancellationToken)

@@ -24,7 +24,6 @@
 		<MudText>Id: @_accountResponse.Id</MudText>
 		<MudText>Name: @_accountResponse.Name</MudText>
 		<MudText>Email: @_accountResponse.Email</MudText>
-		<MudButton OnClick="Logout">Logout</MudButton>
 	}
 
 </div>
@@ -38,19 +37,6 @@
 		await base.OnInitializedAsync();
 		if(Client.IsAuthorizationTokenSet == false) { return; }
 		_accountResponse = await Client.GetCurrentAccount(_cts.Token);
-	}
-
-	private async Task Logout()
-	{
-		Client.ResetAuthorizationToken();
-		await ClearToken();
-		StateHasChanged();
-		await DialogService.ShowMessageBox(
-				"Success!",
-				"Logged out.",
-				yesText: "OK"
-			);
-		NavigationManager.NavigateTo("login");
 	}
 }
 

@@ -1,4 +1,6 @@
-﻿@inherits LayoutComponentBase
+﻿@using Blazored.LocalStorage;
+@using OnlineShop.HttpApiClient;
+@inherits LayoutComponentBase
 
 <MudThemeProvider />
 <MudDialogProvider />
@@ -8,6 +10,7 @@
     <MudAppBar Elevation="0">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
         <MudSpacer />
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="UserLogout" EndIcon="@Icons.Material.Filled.PersonRemove">Logout</MudButton>
         <MudButton Variant="Variant.Filled" Color="Color.Primary" Href="/login" EndIcon="@Icons.Material.Filled.PersonAdd">Login</MudButton>
     </MudAppBar>
     <MudDrawer @bind-Open="_drawerOpen" Elevation="1">
@@ -24,10 +27,22 @@
 </MudLayout>
 
 @code {
+
+    [Inject] protected ILocalStorageService LocalStorage { get; private set; }
+    [Inject] protected IMyShopClient Client { get; private set; }
+    [Inject] protected NavigationManager NavigationManager { get; private set; }
     bool _drawerOpen = true;
 
     void DrawerToggle()
     {
         _drawerOpen = !_drawerOpen;
+    }
+
+    async Task UserLogout()
+    {
+        if (await LocalStorage.ContainKeyAsync("token"))
+            await LocalStorage.RemoveItemAsync("token");
+        Client.ResetAuthorizationToken();
+        NavigationManager.NavigateTo("/");
     }
 }
