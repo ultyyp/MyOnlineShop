@@ -27,6 +27,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityPasswordHasherLib",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "application", "application", "{A9CC519F-70EC-4F09-9858-63C40E603FEF}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{BE00D0E8-BD3C-4FC3-A46B-5EC5E4344FA6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineShop.Domain.Test", "tests/OnlineShop.Domain.Test\OnlineShop.Domain.Test.csproj", "{419D1586-0DF0-4EEF-B8D6-A20825E45FF0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +65,10 @@ Global
 		{6B01ADEE-D7FC-4DB7-A071-E34521D2F414}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6B01ADEE-D7FC-4DB7-A071-E34521D2F414}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6B01ADEE-D7FC-4DB7-A071-E34521D2F414}.Release|Any CPU.Build.0 = Release|Any CPU
+		{419D1586-0DF0-4EEF-B8D6-A20825E45FF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{419D1586-0DF0-4EEF-B8D6-A20825E45FF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{419D1586-0DF0-4EEF-B8D6-A20825E45FF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{419D1586-0DF0-4EEF-B8D6-A20825E45FF0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -75,6 +83,7 @@ Global
 		{6C49117C-73E6-4FA8-A80D-0BBF4244F0AF} = {1954359F-4DEE-484B-BFEE-852131EAC6EF}
 		{6B01ADEE-D7FC-4DB7-A071-E34521D2F414} = {6C49117C-73E6-4FA8-A80D-0BBF4244F0AF}
 		{A9CC519F-70EC-4F09-9858-63C40E603FEF} = {1954359F-4DEE-484B-BFEE-852131EAC6EF}
+		{419D1586-0DF0-4EEF-B8D6-A20825E45FF0} = {BE00D0E8-BD3C-4FC3-A46B-5EC5E4344FA6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {23BB6DE6-DAC9-4B7B-B480-ED99A8BA5821}

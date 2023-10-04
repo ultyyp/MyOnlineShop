@@ -22,7 +22,7 @@ namespace OnlineShop.HttpApiClient
 
 			if (!Uri.TryCreate(host, UriKind.Absolute, out var hostUri))
 			{
-				throw new ArgumentException("The host address should be a valud url", nameof(host));
+				throw new ArgumentException("The host address should be a valid url", nameof(host));
 			}
 			_host = host;
 			_httpClient = httpClient ?? new HttpClient();

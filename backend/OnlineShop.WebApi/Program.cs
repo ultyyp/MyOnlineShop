@@ -18,6 +18,8 @@ var builder = WebApplication.CreateBuilder(args);
 JwtConfig jwtConfig = builder.Configuration
    .GetRequiredSection("JwtConfig")
    .Get<JwtConfig>()!;
+
+
 if (jwtConfig is null)
 {
 	throw new InvalidOperationException("JwtConfig is not configured");
