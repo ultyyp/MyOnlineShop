@@ -12,7 +12,7 @@ namespace OnlineShop.Domain.Entities
         private string _hashedPassword;
 		private Role[]? _roles;
 
-		public Account()
+		protected Account()
 		{
 		}
 
