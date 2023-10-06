@@ -12,12 +12,17 @@ namespace OnlineShop.HttpApiClient
         Task DeleteProduct(Guid id, CancellationToken cancellationToken);
         Task<Product> GetProduct(Guid id, CancellationToken cancellationToken);
         Task<List<Product>> GetProducts(CancellationToken cancellationToken);
+        Task<CartResponse> GetCart(CancellationToken cancellationToken);
+        Task AddCartItemToCart(AddCartItemRequest request, CancellationToken cancellationToken);
+        Task DeleteCartItem(Guid id, CancellationToken cancellationToken);
+        Task ReduceCartItemQuantity(Guid id, CancellationToken cancellationToken);
+        Task IncreaseCartItemQuantity(Guid id, CancellationToken cancellationToken);
         Task UpdateProduct(Product product, Guid id, CancellationToken cancellationToken);
-        Task<RegisterResponse> Register(RegisterRequest request, CancellationToken cancellationToken);
-        Task<LoginResponse> Login(LoginRequest request, CancellationToken cancellationToken);
-		public bool IsAuthorizationTokenSet { get; }
+        Task<LoginByCodeResponse> Register(RegisterRequest account, CancellationToken cancellationToken);
+        Task<LoginByCodeResponse> Login(LoginByPassRequest request, CancellationToken cancellationToken);
+        public bool IsAuthorizationTokenSet { get; }
         public void SetAuthorizationToken(string token);
         public void ResetAuthorizationToken();
         public Task<AccountResponse> GetCurrentAccount(CancellationToken cancellationToken);
-	}
+    }
 }

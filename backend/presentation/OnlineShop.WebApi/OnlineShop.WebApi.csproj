@@ -22,6 +22,8 @@
     <ProjectReference Include="..\..\..\shared\OnlineShop.HttpModels\OnlineShop.HttpModels.csproj" />
     <ProjectReference Include="..\..\infrastructure\IdentityPasswordHasherLib\IdentityPasswordHasherLib.csproj" />
     <ProjectReference Include="..\..\infrastructure\OnlineShop.Data.EntityFramework\OnlineShop.Data.EntityFramework.csproj" />
+    <ProjectReference Include="..\..\infrastructure\OnlineShop.EmailSender.NotiSend\OnlineShop.EmailSender.NotiSend.csproj" />
+    <ProjectReference Include="..\..\infrastructure\OnlineShop.EmailSender.SendGrid\OnlineShop.EmailSender.SendGrid.csproj" />
     <ProjectReference Include="..\..\OnlineShop.Domain\OnlineShop.Domain.csproj" />
   </ItemGroup>
 

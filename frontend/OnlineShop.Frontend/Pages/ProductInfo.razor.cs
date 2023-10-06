@@ -3,12 +3,16 @@ using OnlineShop.HttpApiClient.Entities;
 using OnlineShop.HttpApiClient;
 using MudBlazor;
 using OnlineShop.Frontend.Dialogs;
+using OnlineShop.HttpModels.Requests;
 
 namespace OnlineShop.Frontend.Pages
 {
 
     public partial class ProductInfo : IDisposable
     {
+        [Inject] 
+        private ISnackbar Snackbar { get; set; }
+
         [Inject]
         IMyShopClient? MyShopClient { get; set; }
 
@@ -32,6 +36,15 @@ namespace OnlineShop.Frontend.Pages
         {
             await base.OnInitializedAsync();
             _product = await MyShopClient!.GetProduct(ProductId, _cts.Token);
+        }
+
+        private async Task AddItemToCart()
+        {
+            var account = await MyShopClient!.GetCurrentAccount(_cts.Token);
+            var AddCartItemRequest = new AddCartItemRequest(account.Id, ProductId, 1);
+            await MyShopClient.AddCartItemToCart(AddCartItemRequest, _cts.Token);
+            Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomLeft;
+            Snackbar.Add("Item Added To Cart!", Severity.Success);
         }
 
         private void OpenEditDialog()

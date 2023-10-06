@@ -11,7 +11,7 @@ using OnlineShop.Data.EntityFramework;
 namespace OnlineShop.Data.EntityFramework.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231004145853_InitialCreate")]
+    [Migration("20231006141040_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -81,6 +81,30 @@ namespace OnlineShop.Data.EntityFramework.Migrations
                     b.HasIndex("CartId");
 
                     b.ToTable("CartItems");
+                });
+
+            modelBuilder.Entity("OnlineShop.Domain.Entities.ConfirmationCode", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("AccountId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset>("ExpiresAt")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ConfirmationCodes");
                 });
 
             modelBuilder.Entity("OnlineShop.Domain.Entities.Product", b =>

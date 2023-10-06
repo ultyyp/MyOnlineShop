@@ -19,7 +19,7 @@ public class CentralizedExceptionHandlingFilter
         {
             context.Result = new ObjectResult(new ErrorResponse(message, statusCode))
             {
-                StatusCode=(409)
+                StatusCode = (409)
             };
             context.ExceptionHandled = true;
         }

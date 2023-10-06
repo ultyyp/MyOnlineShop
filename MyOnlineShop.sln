@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33723.286
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineShop.WebApi", "backend\application\OnlineShop.WebApi\OnlineShop.WebApi.csproj", "{DFE098BC-F003-4D15-BA70-441F04681881}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineShop.WebApi", "backend\presentation\OnlineShop.WebApi\OnlineShop.WebApi.csproj", "{DFE098BC-F003-4D15-BA70-441F04681881}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineShop.Frontend", "frontend\OnlineShop.Frontend\OnlineShop.Frontend.csproj", "{94E1FDD5-DC28-48CB-85FC-AFA38D01EA80}"
 EndProject
@@ -25,11 +25,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "infrastructure", "infrastru
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityPasswordHasherLib", "backend\infrastructure\IdentityPasswordHasherLib\IdentityPasswordHasherLib.csproj", "{6B01ADEE-D7FC-4DB7-A071-E34521D2F414}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "application", "application", "{A9CC519F-70EC-4F09-9858-63C40E603FEF}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "presentation", "presentation", "{A9CC519F-70EC-4F09-9858-63C40E603FEF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{BE00D0E8-BD3C-4FC3-A46B-5EC5E4344FA6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineShop.Domain.Test", "tests/OnlineShop.Domain.Test\OnlineShop.Domain.Test.csproj", "{419D1586-0DF0-4EEF-B8D6-A20825E45FF0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineShop.Domain.Test", "tests\OnlineShop.Domain.Test\OnlineShop.Domain.Test.csproj", "{419D1586-0DF0-4EEF-B8D6-A20825E45FF0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineShop.EmailSender.NotiSend", "backend\infrastructure\OnlineShop.EmailSender.NotiSend\OnlineShop.EmailSender.NotiSend.csproj", "{DEA8FB2F-5686-4C73-8C97-4596089772B9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineShop.EmailSender.SendGrid", "backend\infrastructure\OnlineShop.EmailSender.SendGrid\OnlineShop.EmailSender.SendGrid.csproj", "{2D325278-7B4E-40C5-9D69-F479A771B1C1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +73,14 @@ Global
 		{419D1586-0DF0-4EEF-B8D6-A20825E45FF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{419D1586-0DF0-4EEF-B8D6-A20825E45FF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{419D1586-0DF0-4EEF-B8D6-A20825E45FF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DEA8FB2F-5686-4C73-8C97-4596089772B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DEA8FB2F-5686-4C73-8C97-4596089772B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DEA8FB2F-5686-4C73-8C97-4596089772B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DEA8FB2F-5686-4C73-8C97-4596089772B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D325278-7B4E-40C5-9D69-F479A771B1C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D325278-7B4E-40C5-9D69-F479A771B1C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D325278-7B4E-40C5-9D69-F479A771B1C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D325278-7B4E-40C5-9D69-F479A771B1C1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -84,6 +96,8 @@ Global
 		{6B01ADEE-D7FC-4DB7-A071-E34521D2F414} = {6C49117C-73E6-4FA8-A80D-0BBF4244F0AF}
 		{A9CC519F-70EC-4F09-9858-63C40E603FEF} = {1954359F-4DEE-484B-BFEE-852131EAC6EF}
 		{419D1586-0DF0-4EEF-B8D6-A20825E45FF0} = {BE00D0E8-BD3C-4FC3-A46B-5EC5E4344FA6}
+		{DEA8FB2F-5686-4C73-8C97-4596089772B9} = {6C49117C-73E6-4FA8-A80D-0BBF4244F0AF}
+		{2D325278-7B4E-40C5-9D69-F479A771B1C1} = {6C49117C-73E6-4FA8-A80D-0BBF4244F0AF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {23BB6DE6-DAC9-4B7B-B480-ED99A8BA5821}

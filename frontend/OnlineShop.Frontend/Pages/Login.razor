@@ -74,7 +74,7 @@ else
 
 		try
 		{
-			var response = await Client.Login(new LoginRequest()
+			var response = await Client.Login(new LoginByPassRequest()
 			{
 				Email = model.Email,
 				Password = model.Password

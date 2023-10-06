@@ -11,6 +11,7 @@ namespace OnlineShop.Domain.Interfaces
 		IAccountRepository AccountRepository { get; }
 		ICartRepository CartRepository { get; }
 		IProductRepository ProductRepository { get; }
-		Task SaveChangesAsync(CancellationToken cancellationToken = default);
+        IConfirmationCodeRepository ConfirmationCodeRepository { get; }
+        Task SaveChangesAsync(CancellationToken cancellationToken = default);
 	}
 }

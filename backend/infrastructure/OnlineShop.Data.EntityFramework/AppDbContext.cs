@@ -10,8 +10,9 @@
         public DbSet<Account> Accounts => Set<Account>();
 		public DbSet<Cart> Carts => Set<Cart>();
 		public DbSet<CartItem> CartItems => Set<CartItem>();
+        public DbSet<ConfirmationCode> ConfirmationCodes => Set<ConfirmationCode>();
 
-		public AppDbContext(
+        public AppDbContext(	
 			DbContextOptions<AppDbContext> options)
 			: base(options)
 		{
@@ -32,7 +33,12 @@
 					v => v.Split(',', StringSplitOptions.RemoveEmptyEntries)
 						.Select(Enum.Parse<Role>).ToArray()
 				);
-		}
+
+            modelBuilder.Entity<Cart>()
+				.HasMany(cart => cart.Items)
+				.WithOne(cartItem => cartItem.Cart)
+				.HasForeignKey(cartItem => cartItem.CartId);
+        }
 	}
 
 }

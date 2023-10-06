@@ -1,10 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OnlineShop.Domain.Entities;
+using OnlineShop.Domain.Exceptions;
 using OnlineShop.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace OnlineShop.Data.EntityFramework.Repositories
@@ -13,9 +15,22 @@ namespace OnlineShop.Data.EntityFramework.Repositories
 	{
 		public CartRepositoryEf(AppDbContext dbContext) : base(dbContext) { }
 
-		public Task<Cart> GetCartByAccountId(Guid id, CancellationToken cancellationToken)
-		{
-			return Entities.Include(nameof(Cart.Items)).SingleAsync(x => x.AccountId == id, cancellationToken);
-		}
-	}
+        public async Task<Cart> GetCartByAccountId(Guid id, CancellationToken cancellationToken)
+        {
+            var cart = await Entities
+                .Include(it => it.Items)
+                .SingleOrDefaultAsync(it => it.AccountId == id, cancellationToken);
+
+            if (cart is null)
+            {
+                throw new AccountNotFoundException("Account with given email not found");
+            }
+
+            return cart;
+        }
+
+        
+
+
+    }
 }

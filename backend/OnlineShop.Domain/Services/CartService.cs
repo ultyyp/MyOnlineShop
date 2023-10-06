@@ -29,5 +29,40 @@ namespace OnlineShop.Domain.Services
 		{
 			return _uow.CartRepository.GetCartByAccountId(accountId, cancellationToken);
 		}
-	}
+
+        public async Task DeleteCartItemById(Guid cartItemId, Guid accountId, CancellationToken cancellationToken)
+        {
+            var cart = await GetAccountCart(accountId, cancellationToken);
+            var cartItem = cart.Items!.Single(it => it.Id == cartItemId);
+			cart.Items!.Remove(cartItem);
+            await _uow.CartRepository.Update(cart, cancellationToken);
+            await _uow.SaveChangesAsync();
+        }
+
+        public async Task IncreaseCartItemQuantityById(Guid cartItemId, Guid accountId, CancellationToken cancellationToken)
+        {
+            var cart = await GetAccountCart(accountId, cancellationToken);
+            var cartItem = cart.Items!.SingleOrDefault(it => it.Id == cartItemId);
+			cartItem.Quantity++;
+            await _uow.CartRepository.Update(cart, cancellationToken);
+            await _uow.SaveChangesAsync();
+        }
+
+        public async Task DecreaseCartItemQuantityById(Guid cartItemId, Guid accountId, CancellationToken cancellationToken)
+        {
+			var cart = await GetAccountCart(accountId, cancellationToken);
+            var cartItem = cart.Items!.Single(it => it.Id == cartItemId);
+            
+			if(cartItem.Quantity > 1)
+			{
+				cartItem.Quantity--;
+			}
+			else
+			{
+				await DeleteCartItemById(cartItemId, accountId, cancellationToken);
+            }
+            await _uow.CartRepository.Update(cart, cancellationToken);
+            await _uow.SaveChangesAsync();
+        }
+    }
 }

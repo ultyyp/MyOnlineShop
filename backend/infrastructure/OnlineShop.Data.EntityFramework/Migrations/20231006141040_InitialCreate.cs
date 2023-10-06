@@ -39,6 +39,21 @@ namespace OnlineShop.Data.EntityFramework.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ConfirmationCodes",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "TEXT", nullable: false),
+                    AccountId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Code = table.Column<string>(type: "TEXT", nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(type: "TEXT", nullable: false),
+                    ExpiresAt = table.Column<DateTimeOffset>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ConfirmationCodes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Products",
                 columns: table => new
                 {
@@ -85,6 +100,9 @@ namespace OnlineShop.Data.EntityFramework.Migrations
 
             migrationBuilder.DropTable(
                 name: "CartItems");
+
+            migrationBuilder.DropTable(
+                name: "ConfirmationCodes");
 
             migrationBuilder.DropTable(
                 name: "Products");

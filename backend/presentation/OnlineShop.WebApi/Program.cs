@@ -13,6 +13,10 @@ using OnlineShop.WebApi.Configurations;
 using OnlineShop.WebApi.Services;
 using Microsoft.OpenApi.Models;
 using OnlineShop.WebApi.Filters;
+using OnlineShop.Domain.Events;
+using Microsoft.Extensions.Configuration;
+using OnlineShop.EmailSender.NotiSend;
+using OnlineShop.EmailSender.SendGrid;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,7 +41,8 @@ builder.Services.AddControllers(options =>
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-//builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen();
+
 builder.Services.AddSwaggerGen(c =>
 {
 	c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
@@ -88,14 +93,33 @@ builder.Services.AddAuthentication(options =>
    });
 builder.Services.AddAuthorization();
 
+//builder.Services.AddOptions<NotiSendConfig>()
+//	.BindConfiguration("NotiSendConfig")
+//	.ValidateDataAnnotations()
+//	.ValidateOnStart();
+
+builder.Services.AddOptions<SendGridConfig>()
+    .BindConfiguration("SendGridConfig")
+    .ValidateDataAnnotations()
+    .ValidateOnStart();
+
 //Database
 builder.Services.AddScoped<IProductRepository, ProductRepositoryEf>();
 builder.Services.AddScoped<IAccountRepository, AccountRepositoryEf>();
 builder.Services.AddScoped<ICartRepository, CartRepositoryEf>();
+builder.Services.AddScoped<IConfirmationCodeRepository, ConfirmationCodeRepositoryEf>();
+builder.Services.AddScoped<IEmailSender, SendGridEmailSender>();
+
+builder.Services.AddMediatR(cfg =>
+{
+    cfg.RegisterServicesFromAssemblies(typeof(AccountRegistered).Assembly);
+    cfg.RegisterServicesFromAssemblies(typeof(SendLogin2FA).Assembly);
+});
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWorkEf>();
 
 builder.Services.AddScoped<AccountService>();
+builder.Services.AddScoped<CartService>();
 builder.Services.AddSingleton<IApplicationPasswordHasher, IdentityPasswordHasher>();
 builder.Services.AddSingleton<IPageRequestCounterService, PageRequestCounterService>();
 

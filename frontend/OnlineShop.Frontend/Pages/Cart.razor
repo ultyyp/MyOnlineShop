@@ -1,0 +1,113 @@
+﻿@page "/cart"
+@using OnlineShop.Frontend.Components
+@using OnlineShop.HttpApiClient
+@using OnlineShop.HttpModels.Responses
+@using OnlineShop.HttpApiClient.Entities;
+@inject IMyShopClient Client
+@inherits AppComponentBase
+
+@if(Client.IsAuthorizationTokenSet == false)
+{
+    <h1>Please Login!</h1>
+}
+else
+{
+    <div style="background-color:beige; border-radius:5px; padding:50px;">
+	<h1 style="text-align:center;">Cart</h1>
+	<hr style="height:3px; background-color:black; border:none; margin-bottom:15px;" />
+	<MudGrid>
+		@if(_elements is null)
+		{
+			<div style="margin:5px;">Loading...</div>
+			<MudProgressCircular Color="Color.Default" Indeterminate="true" />
+		}
+		else
+		{
+			foreach (var DTO in _elements)
+			{
+				<div style="margin:5px;">
+                        <MudItem Justify="Justify.Center">
+                            <MudPaper Style="height:fit-content; width:fit-content; padding:10px; word-wrap: break-word;">
+                                <center><div style="border-color:black; border-width:2px; border-style:groove; align-self:center; text-align:center; padding:5px;  border-radius:5px; margin:5px; width:fit-content;">Name: @DTO.ProductName</div></center>
+                                <center><div style="border-color:black; border-width:2px; border-style:groove; align-self:center; text-align:center; padding:5px;  border-radius:5px; margin:5px; width:fit-content;">Quantity: @DTO.Quantity</div></center>
+                                <div style="display:flex; justify-content:center;">
+                                    <MudButton @onclick="() => ReduceQuantity(DTO)" Style="border-color:black; border-width:2px; border-style:groove; align-self:center; text-align:center; padding:5px;  border-radius:5px; margin:5px; width:fit-content;">-</MudButton>
+                                    <MudButton @onclick="() => IncreaseQuantity(DTO)" Style="border-color:black; border-width:2px; border-style:groove; align-self:center; text-align:center; padding:5px;  border-radius:5px; margin:5px; width:fit-content;">+</MudButton>
+                                </div>
+                                <center><MudButton @onclick="() => DeleteCartItem(DTO)" Style="border-color:red; border-width:2px; border-style:groove; align-self:center; text-align:center; padding:5px;  border-radius:5px; margin:5px; width:fit-content;">Remove</MudButton></center>
+                            </MudPaper>
+                            
+                        </MudItem>
+				</div>
+			}
+		}
+	</MudGrid>
+</div>
+
+}
+
+@code {
+    [Inject] private ISnackbar Snackbar { get; set; }
+    [Inject] private IDialogService DialogService { get; set; }
+    [Inject] private NavigationManager NavigationManager { get; set; }
+    private IEnumerable<CartItemDTO> _elements = new List<CartItemDTO>();
+    private CancellationTokenSource _cts = new();
+
+    private async Task ReduceQuantity(CartItemDTO DTO)
+    {
+        await Client.ReduceCartItemQuantity(DTO.Id, _cts.Token);
+        await LoadItems();
+        Snackbar.Add("Item Quantity Reduced!", Severity.Normal);
+        StateHasChanged();
+
+    }
+
+    private async Task IncreaseQuantity(CartItemDTO DTO)
+    {
+        await Client.IncreaseCartItemQuantity(DTO.Id, _cts.Token);
+        await LoadItems();
+        Snackbar.Add("Item Quantity Increased!", Severity.Success);
+        StateHasChanged();
+
+    }
+
+    private async Task DeleteCartItem(CartItemDTO DTO)
+    {
+        await Client.DeleteCartItem(DTO.Id, _cts.Token);
+        await LoadItems();
+        Snackbar.Add("Item Removed!", Severity.Success);
+        StateHasChanged();
+    }
+
+    private async Task LoadItems()
+    {
+        try
+        {
+            var response = await Client.GetCart(_cts.Token);
+            _elements = response.Items;
+        }
+        catch (MyShopApiException ex)
+        {
+            await DialogService.ShowMessageBox(
+                "Error!",
+                $"API Exception: {ex.Message}");
+        }
+        catch (Exception exception)
+        {
+            await DialogService.ShowMessageBox(
+                "Error!",
+                $"Unknown Exception: {exception.Message}");
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        if (Client.IsAuthorizationTokenSet == false) return;
+
+        Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomLeft;
+
+        await LoadItems();
+    }
+}

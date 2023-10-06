@@ -25,45 +25,40 @@ namespace OnlineShop.WebApi.Controllers
 
 
         [HttpPost("register")]
-        public async Task<ActionResult<RegisterResponse>> Register(RegisterRequest request,
+        public async Task<ActionResult<LoginByCodeResponse>> Register(RegisterRequest request, CancellationToken cancellationToken)
+        {
+            if (request == null) throw new ArgumentNullException(nameof(request));
+            var customerRole = new Role[] { Role.Customer };
+            await _accountService.Register(request.Name, request.Email, request.Password, customerRole, cancellationToken);
+            var (account, codeId) = await _accountService.Login(request.Email, request.Password, cancellationToken);
+            var token = _tokenService.GenerateToken(account);
+            return new LoginByCodeResponse(account.Id, account.Name, token);
+        }
+
+        // 1-st stage of login
+        [HttpPost("login")]
+        public async Task<ActionResult<LoginByCodeResponse>> Login(
+            LoginByPassRequest request,
             CancellationToken cancellationToken)
         {
-			try
-			{
-				var account = await _accountService.Register(request.Name, request.Email, request.Password, new Role[] {Role.Customer}, cancellationToken);
-				var token = _tokenService.GenerateToken(account);
-				return new RegisterResponse(account.Id, account.Name, token);
-			}
-            catch (EmailAlreadyExistsException)
-            {
-                return Conflict(new ErrorResponse("Email Already Registered!"));
-            }
-           
+            var (account, codeId) = await _accountService.Login(request.Email, request.Password, cancellationToken);
+            var token = _tokenService.GenerateToken(account);
+            return new LoginByCodeResponse(account.Id, account.Name, token);
+        }
+
+        // 2-nd stage of login
+        [HttpPost("login_by_code")]
+        public async Task<ActionResult<LoginByCodeResponse>> LoginByCode(
+            LoginByCodeRequest request,
+            CancellationToken cancellationToken)
+        {
+            var account = await _accountService.LoginByCode(request.Email, request.CodeId, request.Code, cancellationToken);
+            var token = _tokenService.GenerateToken(account);
+            return new LoginByCodeResponse(account.Id, account.Name, token);
         }
 
 
-		[HttpPost("login")]
-		public async Task<ActionResult<LoginResponse>> Login(
-			LoginRequest request,
-			CancellationToken cancellationToken)
-		{
-			try
-			{
-				var account = await _accountService.Login(request.Email, request.Password, cancellationToken);
-				var token = _tokenService.GenerateToken(account);
-				return new LoginResponse(account.Id, account.Name, token);
-			}
-			catch (AccountNotFoundException)
-			{
-				return Conflict(new ErrorResponse("Account With That Email Not Found!"));
-			}
-			catch (InvalidPasswordException)
-			{
-				return Conflict(new ErrorResponse("Incorrect Password!"));
-			}
-		}
-
-		[Authorize]
+        [Authorize]
 		[HttpGet("current")]
 		public async Task<ActionResult<AccountResponse>> GetCurrentAccount(CancellationToken cancellationToken)
 		{

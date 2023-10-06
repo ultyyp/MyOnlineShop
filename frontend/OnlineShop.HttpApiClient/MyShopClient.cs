@@ -83,30 +83,78 @@ namespace OnlineShop.HttpApiClient
 			response.EnsureSuccessStatusCode();
 		}
 
-		public async Task<RegisterResponse> Register(RegisterRequest request, CancellationToken cancellationToken)
-		{
-			var uri = "/account/register";
-			var response = await PostAsJsonAndDeserializeAsync<RegisterRequest, RegisterResponse>(uri, request, cancellationToken);
-			SetAuthorizationToken(response.Token);
-			return response;
-		}
 
-		public async Task<LoginResponse> Login(LoginRequest request, CancellationToken cancellationToken)
-		{
-			const string uri = "account/login";
-			var response = await PostAsJsonAndDeserializeAsync<LoginRequest, LoginResponse>(uri, request, cancellationToken);
-			SetAuthorizationToken(response.Token);
-			return response;
-		}
 
-		public async Task<AccountResponse> GetCurrentAccount(CancellationToken cancellationToken)
+        public async Task<LoginByCodeResponse> Register(RegisterRequest request, CancellationToken cancellationToken)
+        {
+            ArgumentNullException.ThrowIfNull(request);
+
+            const string uri = "account/register";
+
+            var response = await PostAsJsonAndDeserializeAsync<RegisterRequest, LoginByCodeResponse>(uri, request, cancellationToken);
+            SetAuthorizationToken(response.Token);
+            return response;
+        }
+
+        public async Task<LoginByCodeResponse> Login(LoginByPassRequest request, CancellationToken cancellationToken)
+        {
+            ArgumentNullException.ThrowIfNull(request);
+            const string uri = "account/login";
+            var response = await PostAsJsonAndDeserializeAsync<LoginByPassRequest, LoginByCodeResponse>(uri, request, cancellationToken);
+            SetAuthorizationToken(response.Token);
+            return response;
+        }
+
+        public async Task<AccountResponse> GetCurrentAccount(CancellationToken cancellationToken)
 		{
 			var uri = "/account/current";
 			AccountResponse? response = await _httpClient.GetFromJsonAsync<AccountResponse>(uri, cancellationToken);
 			return response;
 		}
 
-		public bool IsAuthorizationTokenSet { get; private set; }
+        public async Task<CartResponse> GetCart(CancellationToken cancellationToken)
+        {
+            var cartItems = await _httpClient
+                .GetFromJsonAsync<CartResponse>($"cart/current", cancellationToken);
+            if (cartItems is null)
+            {
+                throw new InvalidOperationException("The server returned null");
+            }
+            return cartItems;
+        }
+
+        public async Task AddCartItemToCart(AddCartItemRequest request, CancellationToken cancellationToken)
+        {
+            ArgumentNullException.ThrowIfNull(request);
+            using var response = await _httpClient.PostAsJsonAsync("cart/add", request, cancellationToken);
+            response.EnsureSuccessStatusCode();
+        }
+
+        public async Task DeleteCartItem(Guid id, CancellationToken cancellationToken)
+        {
+			var cartRequest = new CartIdRequest(id);
+            using var response = await _httpClient.PostAsJsonAsync("cart/delete", cartRequest, cancellationToken);
+            response.EnsureSuccessStatusCode();
+        }
+
+        public async Task ReduceCartItemQuantity(Guid id,  CancellationToken cancellationToken)
+		{
+            var cartRequest = new CartIdRequest(id);
+            using var response = await _httpClient.PostAsJsonAsync("cart/decrease", cartRequest, cancellationToken);
+            response.EnsureSuccessStatusCode();
+        }
+
+        public async Task IncreaseCartItemQuantity(Guid id, CancellationToken cancellationToken)
+        {
+			var cartRequest = new CartIdRequest(id);
+            using var response = await _httpClient.PostAsJsonAsync("cart/increase", cartRequest, cancellationToken);
+            response.EnsureSuccessStatusCode();
+        }
+
+
+
+
+        public bool IsAuthorizationTokenSet { get; private set; }
 
 		public void SetAuthorizationToken(string token)
 		{

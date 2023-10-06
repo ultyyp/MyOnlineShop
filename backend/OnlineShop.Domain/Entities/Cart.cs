@@ -58,8 +58,9 @@ namespace OnlineShop.Domain.Entities
 
 			public double Quantity { get; set; }
 
-			//External Key To A Cart.Id
-			public Cart Cart { get; set; } = null!;
+            //External Key To A Cart.Id
+            public Guid CartId { get; set; }
+            public Cart Cart { get; set; }
 
 			
 		}
