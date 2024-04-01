@@ -20,7 +20,7 @@ namespace OnlineShop.Domain.Entities
 		public Guid AccountId { get; set; }
 
 		//Reverse Navigation Property
-		public List<CartItem>? Items;
+		public List<CartItem>? Items { get; set; }
 
 		public void AddItem(Guid productId, double quantity)
 		{

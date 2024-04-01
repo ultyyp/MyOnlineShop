@@ -25,11 +25,11 @@ namespace OnlineShop.Domain.Services
         public virtual async Task Register(string name, string email, string password, Role[] roles, CancellationToken cancellationToken)
         {
             if (string.IsNullOrWhiteSpace(name))
-                throw new ArgumentException($"'{nameof(name)}' cannot be null or whitespace.", nameof(name));
+                throw new ArgumentNullException($"'{nameof(name)}' cannot be null or whitespace.", nameof(name));
             if (string.IsNullOrWhiteSpace(email))
-                throw new ArgumentException($"'{nameof(email)}' cannot be null or whitespace.", nameof(email));
+                throw new ArgumentNullException($"'{nameof(email)}' cannot be null or whitespace.", nameof(email));
             if (string.IsNullOrWhiteSpace(password))
-                throw new ArgumentException($"'{nameof(password)}' cannot be null or whitespace.", nameof(password));
+                throw new ArgumentNullException($"'{nameof(password)}' cannot be null or whitespace.", nameof(password));
 
             var accountExists = await _uow.AccountRepository.FindAccountByEmail(email, cancellationToken);
 

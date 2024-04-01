@@ -1,6 +1,6 @@
 using OnlineShop.Domain.Entities;
 
-namespace MyOnlineShop.Domain.Test
+namespace OnlineShop.Domain.Test
 {
     public class CartTests
     {
